@@ -2,6 +2,7 @@ package com.ClientHub.api.service;
 
 import com.ClientHub.api.component.ClientMapper;
 import com.ClientHub.api.dto.request.ClientRequestChangeEmailDTO;
+import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
 import com.ClientHub.api.exception.ClientAlreadyExistsException;
@@ -34,24 +35,24 @@ public class ClientServiceImpl implements ClientService {
 
     }
 
+
+    @Transactional(readOnly = true)
     @Override
-    public ClientResponseDTO getById(Integer id) {
+    public ClientResponseDTO getByIdClient(Integer id) {
 
         Client client = getClientId(id);
         return clientMapper.toClientResponseDTO(client);
     }
 
 
+    @Transactional
     @Override
-    public void updateClientName(int id, String newName){
+    public void updateClientName(int id, ClientRequestChangeNameDTO changeNameDTO){
 
         Client client = getClientId(id);
 
-        client.updateName(newName);
+        client.updateName(changeNameDTO.newEmail());
 
-        for (int k = i; ){
-            brea
-        }
     }
 
 
@@ -69,6 +70,7 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.save(client);
     }
 
+    @Transactional
     @Override
     public void updateClientState(int id){
 
