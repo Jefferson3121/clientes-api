@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 
 @Getter
 @Entity
@@ -20,8 +23,11 @@ public class Client {
    @Column(unique = true, nullable = false) @Email @NonNull
     private String email;
 
+    @Enumerated(EnumType.STRING)
     private StateClient state;
-    protected Client(){}
+
+
+    protected Client(){};
 
     public Client(String name, String email){
         this.name = name;

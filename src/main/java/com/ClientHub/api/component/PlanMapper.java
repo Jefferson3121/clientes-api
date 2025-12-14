@@ -1,0 +1,14 @@
+package com.ClientHub.api.component;
+
+import com.ClientHub.api.dto.request.PLanRequestDTO;
+import com.ClientHub.api.dto.response.PlanResponseDTO;
+import com.ClientHub.api.model.Plan;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface PlanMapper {
+
+    Plan toPlan(PLanRequestDTO pLanRequestDTO);
+
+    PlanResponseDTO toPlanResponseDTO(Plan plan);
+}

@@ -24,4 +24,12 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
+
+    @ExceptionHandler(UnchangedValueException.class)
+    public ResponseEntity<ResponseError> UnchangedValueException(UnchangedValueException ex){
+
+        ResponseError error = new ResponseError(HttpStatus.CONFLICT.value(), ex.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 }
