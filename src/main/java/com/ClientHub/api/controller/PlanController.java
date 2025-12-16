@@ -60,7 +60,4 @@ public class PlanController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
-
-
 }
