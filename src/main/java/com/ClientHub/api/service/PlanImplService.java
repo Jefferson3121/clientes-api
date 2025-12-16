@@ -62,7 +62,7 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public void changePlanName(int id,@NotBlank String newName){
+    public void changePlanName(int id,String newName){
 
         validateId(id);
 
@@ -85,7 +85,7 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public void changePlanPrice(int id,@NotNull BigDecimal price){
+    public void changePlanPrice(int id,BigDecimal price){
 
         if (price.compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("Price no puede ser inferior o igual a cero (0)");
