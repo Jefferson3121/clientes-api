@@ -2,17 +2,16 @@ package com.ClientHub.api.service;
 
 import com.ClientHub.api.dto.request.PLanRequestDTO;
 import com.ClientHub.api.dto.response.PlanResponseDTO;
-import com.ClientHub.api.model.Plan;
 
 import java.math.BigDecimal;
 
-public interface ServicePlan {
+public interface PlanService {
 
     public PlanResponseDTO add(PLanRequestDTO pLanRequestDTO);
 
-    public void deletePlan(int id);
+    public void delete(int id);
 
-    public PlanResponseDTO getPlan(int id);
+    public PlanResponseDTO getById(int id);
 
     public void changePlanName(int id, String newName);
 

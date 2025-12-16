@@ -7,7 +7,7 @@ import com.ClientHub.api.dto.response.ClientResponseDTO;
 
 public interface ClientService {
 
-    public void registerCliente(ClientRequestDTO clientRequestDTO);
+    public void registerClient(ClientRequestDTO clientRequestDTO);
 
     public ClientResponseDTO getByIdClient(Integer id);
 

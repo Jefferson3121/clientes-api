@@ -10,7 +10,6 @@ import com.ClientHub.api.exception.ClientNotFoundException;
 import com.ClientHub.api.model.Client;
 import com.ClientHub.api.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
