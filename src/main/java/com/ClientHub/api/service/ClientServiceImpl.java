@@ -7,7 +7,7 @@ import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
 import com.ClientHub.api.exception.ClientAlreadyExistsException;
 import com.ClientHub.api.exception.ClientNotFoundException;
-import com.ClientHub.api.model.Client;
+import com.ClientHub.api.domain.Client;
 import com.ClientHub.api.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

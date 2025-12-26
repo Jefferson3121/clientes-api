@@ -1,4 +1,4 @@
-package com.ClientHub.api.exception;
+package com.ClientHub.api.dto.response;
 
 import java.time.LocalDateTime;
 

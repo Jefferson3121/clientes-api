@@ -1,6 +1,6 @@
 package com.ClientHub.api.repository;
 
-import com.ClientHub.api.model.Plan;
+import com.ClientHub.api.domain.Plan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

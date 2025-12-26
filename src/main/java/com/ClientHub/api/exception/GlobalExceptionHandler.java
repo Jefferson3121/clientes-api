@@ -1,6 +1,6 @@
 package com.ClientHub.api.exception;
 
-import org.apache.coyote.Response;
+import com.ClientHub.api.dto.response.ResponseError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

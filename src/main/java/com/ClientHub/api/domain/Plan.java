@@ -1,6 +1,8 @@
-package com.ClientHub.api.model;
+package com.ClientHub.api.domain;
 
 import com.ClientHub.api.exception.UnchangedValueException;
+import com.ClientHub.api.domain.enums.PlanDuration;
+import com.ClientHub.api.domain.enums.State;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -22,26 +24,32 @@ public class Plan {
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
-    private StatePlan state;
+    private State state;
 
-    protected Plan(){};
+    private PlanDuration planDuration;
+
+    protected Plan(){
+        this.state = State.INACTIVE;
+    }
 
 
-    public Plan(String name, BigDecimal price){
+    public Plan(String name, BigDecimal price, PlanDuration planDuration){
+
+        this();
 
         validateName(name);
         validatePrice(price);
 
         this.name = name;
         this.price = price;
-        this.state = StatePlan.INACTIVE;
+        this.planDuration = planDuration;
     }
 
     public void modifyName(String newName){
 
-        validateName(name);
+        validateName(newName);
 
-        this.name = name;
+        this.name = newName;
     }
 
 
@@ -55,10 +63,10 @@ public class Plan {
 
     public void modifyState(){
 
-        if (this.state == StatePlan.INACTIVE){
-            this.state = StatePlan.ACTIVE;
+        if (this.state == State.INACTIVE){
+            this.state = State.ACTIVE;
         }else  {
-            this.state =  StatePlan.INACTIVE;
+            this.state =  State.INACTIVE;
         }
 
     }
@@ -71,7 +79,7 @@ public class Plan {
             throw new IllegalArgumentException("Name invalido");
         }
 
-        if (name == this.name){
+        if (name.equals(this.name)){
             throw new UnchangedValueException("Name ingresado es igual a name actual");
         }
     }

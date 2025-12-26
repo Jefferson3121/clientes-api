@@ -16,4 +16,6 @@ public interface ClientService {
     public void updateClientEmail(int id, ClientRequestChangeEmailDTO clientRequestChangeEmailDTO);
 
     public void updateClientState(int id);
+
+    public void automaticallyDelete(int id);
 }
