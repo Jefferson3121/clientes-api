@@ -46,6 +46,8 @@ public class Subscription {
         this.client = client;
     }
 
+
+
     public void isTrueToCancel(){
         if (isCancelled()){
             throw new IllegalStateException(String.format("La suscripcion esta canecelada"));

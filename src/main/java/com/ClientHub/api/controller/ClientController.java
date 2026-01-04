@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/client")
 public class ClientController {
 
-    private ClientService clientService;
+    private final ClientService clientService;
 
 
     @PostMapping
     public ResponseEntity<Void> registerClient(@Valid @RequestBody ClientRequestDTO clientRequestDTO){
 
-        clientService.registerCliente(clientRequestDTO);
+        clientService.registerClient(clientRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -59,14 +59,4 @@ public class ClientController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
-
-
-
-
-
-
-
-
 }

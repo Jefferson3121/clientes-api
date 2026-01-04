@@ -17,5 +17,5 @@ public interface ClientService {
 
     public void updateClientState(int id);
 
-    public void automaticallyDelete(int id);
+    //public void automaticallyDelete(int id);
 }

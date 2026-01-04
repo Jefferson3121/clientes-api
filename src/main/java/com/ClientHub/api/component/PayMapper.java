@@ -7,11 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring",
-                         injectionStrategy = InjectionStrategy.CONSTRUCTOR
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR
 )
 public interface PayMapper {
 
-    @Mapping(source = "suscription.id", target = "suscriptionId")
+    @Mapping(source = "subscription.id", target = "subscriptionId")
     PayResponseDTO toPayResponseDTO(Pay pay);
 
 

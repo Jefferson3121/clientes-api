@@ -3,6 +3,8 @@ package com.ClientHub.api.exception;
 import com.ClientHub.api.dto.response.ResponseError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,15 +16,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClientNotFoundException.class)
     public ResponseEntity<ResponseError> handleClientNotFoundException(ClientNotFoundException ex){
 
-        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(),ex.getMessage(),LocalDateTime.now());
+        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(),ex.getMessage(), LocalDateTime.now());
        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(ClientAlreadyExistsException.class)
     public ResponseEntity<ResponseError> checkIfClientExists(ClientAlreadyExistsException ex){
 
-        ResponseError error = new ResponseError(HttpStatus.CONFLICT.value(), ex.getMessage(), LocalDateTime.now());
-
+        ResponseError error = new ResponseError(HttpStatus.CONFLICT.value(), ex.getMessage(),LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
@@ -30,7 +31,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseError> UnchangedValueException(UnchangedValueException ex){
 
         ResponseError error = new ResponseError(HttpStatus.CONFLICT.value(), ex.getMessage(), LocalDateTime.now());
-
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
@@ -38,9 +38,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PlanNoFoundException.class)
     public ResponseEntity<ResponseError> handlerPlanNoFoundException(PlanNoFoundException ex){
 
-        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(), ex.getMessage(), LocalDateTime.now());
-
+        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(), ex.getMessage(),LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ResponseError> handlerNullPointerException(NullPointerException ex){
+
+        ResponseError error = new ResponseError(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseError> handleValidation(MethodArgumentNotValidException ex) {
+
+        FieldError error = ex.getFieldError();
+
+        ResponseError errorRespone = new ResponseError(HttpStatus.BAD_REQUEST.value(),String.format("El campo %s %s", error.getField(), error.getDefaultMessage()), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRespone);
     }
 }

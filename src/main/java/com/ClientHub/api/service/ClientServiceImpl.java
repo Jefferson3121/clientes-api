@@ -21,7 +21,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
-    public void registerCliente(ClientRequestDTO clientRequestDTO) {
+    public void registerClient(ClientRequestDTO clientRequestDTO) {
 
         if (clientRepository.existsByEmail(clientRequestDTO.email())) {
             throw new ClientAlreadyExistsException(

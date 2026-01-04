@@ -26,6 +26,7 @@ public class Plan {
     @Enumerated(EnumType.STRING)
     private State state;
 
+    @Enumerated(value = EnumType.STRING)
     private PlanDuration planDuration;
 
     protected Plan(){
