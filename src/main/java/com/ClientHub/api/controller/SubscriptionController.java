@@ -51,7 +51,4 @@ public class SubscriptionController {
 
         subscriptionService.renewSubscription(id);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-
 }
