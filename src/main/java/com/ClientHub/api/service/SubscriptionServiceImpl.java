@@ -80,13 +80,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     }
 
 
-    private Subscription getSUbscriptionOfRepository(Integer id) {
 
-        validateId(id);
-
-        return subscriptionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Entidad con id:%d no existe", id)));
-    }
 
     @Transactional
     @Override
@@ -97,13 +91,10 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     }
 
 
-
-    private void validateId(Integer id){
-        Objects.requireNonNull(id, "Id no puede ser null");
-
-        if (id <= 0){
-            throw new IllegalArgumentException(String.format("(Id = %d) id no puede ser igual o menor a cero", id));
-        }
+    private Subscription getSUbscriptionOfRepository(Integer id) {
+        
+        return subscriptionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Entidad con id:%d no existe", id)));
     }
 }
 

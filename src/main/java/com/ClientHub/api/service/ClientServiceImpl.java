@@ -6,9 +6,9 @@ import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
 import com.ClientHub.api.exception.ClientAlreadyExistsException;
-import com.ClientHub.api.exception.ClientNotFoundException;
 import com.ClientHub.api.domain.Client;
 import com.ClientHub.api.repository.ClientRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,11 +84,6 @@ public class ClientServiceImpl implements ClientService {
 
 
 
-
-
-
-
-
     private Client getClientId(Integer id) {
 
         if (id < 0){
@@ -96,7 +91,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         return clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(String.format("Cliente con id: %d, no existe", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d, no existe", id)));
 
     }
 }

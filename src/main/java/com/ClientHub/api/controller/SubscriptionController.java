@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/subscription")
 @RequiredArgsConstructor
@@ -27,6 +29,8 @@ public class SubscriptionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubscription(@PathVariable Integer id) {
 
+        validateId(id);
+
         subscriptionService.deleteSubscription(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -34,13 +38,16 @@ public class SubscriptionController {
     @PatchMapping("/{id}/activate")
     public ResponseEntity<Void> activateSubscription(@PathVariable Integer id){
 
-        subscriptionService.activateSubscription(id);
+        validateId(id);
 
+        subscriptionService.activateSubscription(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<Void> cancelSubscription(@PathVariable Integer id) {
+
+        validateId(id);
 
         subscriptionService.cancelSubscription(id);
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -49,6 +56,19 @@ public class SubscriptionController {
 
     public ResponseEntity<Void> renewSubscription(@PathVariable Integer id) {
 
+        validateId(id);
+
         subscriptionService.renewSubscription(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+
+    }
+
+
+    private void validateId(Integer id){
+        Objects.requireNonNull(null, "Id no puede ser null");
+
+        if (id <= 0){
+            throw new IllegalArgumentException(String.format("(Id = %d) id no puede ser igual o menor a cero", id));
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.ClientHub.api.exception;
 
 import com.ClientHub.api.dto.response.ResponseError;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,11 +14,11 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ClientNotFoundException.class)
-    public ResponseEntity<ResponseError> handleClientNotFoundException(ClientNotFoundException ex){
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ResponseError> entityNotFound(EntityNotFoundException ex){
 
-        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(),ex.getMessage(), LocalDateTime.now());
-       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(), ex.getMessage(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(ClientAlreadyExistsException.class)
@@ -59,5 +60,13 @@ public class GlobalExceptionHandler {
         ResponseError errorRespone = new ResponseError(HttpStatus.BAD_REQUEST.value(),String.format("El campo %s %s", error.getField(), error.getDefaultMessage()), LocalDateTime.now());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRespone);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseError> handlerIlegalArgument(IllegalArgumentException ex){
+
+        ResponseError error = new ResponseError(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }
