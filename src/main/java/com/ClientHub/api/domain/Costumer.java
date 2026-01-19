@@ -16,10 +16,10 @@ public class Client {
    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-   @Column(nullable = false) @NonNull
+   @Column(nullable = false)
     private String name;
 
-   @Column(unique = true, nullable = false) @Email @NonNull
+   @Column(unique = true, nullable = false) @Email
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -29,7 +29,8 @@ public class Client {
         this.state = State.INACTIVE;
     }
 
-    public Client(@NonNull String name,@NonNull String email){
+    public Client(String name,String email){
+
         this();
 
         validateString(name);
