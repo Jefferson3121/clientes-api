@@ -19,7 +19,7 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     @PostMapping
-    public ResponseEntity<SubscriptionResponseDTO> createSubscription(@Valid SubscriptionRequestDTO subscriptionRequestDTO){
+    public ResponseEntity<SubscriptionResponseDTO> createSubscription(@Valid @RequestBody SubscriptionRequestDTO subscriptionRequestDTO){
         SubscriptionResponseDTO subscriptionResponse = subscriptionService.createSubscription(subscriptionRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionResponse);
