@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/client")
@@ -37,26 +39,31 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}/name")
-    public ResponseEntity<Void> updateClientName(@PathVariable int id, @Valid ClientRequestChangeNameDTO clientRequestChangeNameDTO){
+    public ResponseEntity<Void> updateClientName(@PathVariable int id, @Valid @RequestBody   ClientRequestChangeNameDTO clientRequestChangeNameDTO){
 
         clientService.updateClientName(id, clientRequestChangeNameDTO);
-
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PatchMapping("/{id}/email")
-    public ResponseEntity<Void> updateClientEmail(@PathVariable int id, @Valid ClientRequestChangeEmailDTO changeEmailDTO){
+    public ResponseEntity<Void> updateClientEmail(@PathVariable int id, @Valid @RequestBody ClientRequestChangeEmailDTO changeEmailDTO){
 
         clientService.updateClientEmail(id,changeEmailDTO);
-
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
     @PatchMapping("/{id}/state")
     public ResponseEntity<Void> updateClientState(@PathVariable int id){
+        validateId(id); // revisar aqui de que pasa cuando es int primitivo y no se le envia valor ya que no podemos validar null
         clientService.updateClientState(id);
 
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+
+
+    private void validateId(Integer id){
+        Objects.requireNonNull(id, "El id no puede ser null");
     }
 }
