@@ -8,10 +8,14 @@ import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.domain.Plan;
 import com.ClientHub.api.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.math.BigDecimal;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,14 +24,21 @@ public class PlanImplService implements PlanService {
     private final PlanRepository planRepository;
     private final PlanMapper planMapper;
 
+    public static final Logger logger = LoggerFactory.getLogger(PlanImplService.class);
+
     @Transactional
     @Override
     public PlanResponseDTO add(PLanRequestDTO pLanRequestDTO) {
+
+        logger.info("ENTRÉ AL MÉTODO PlanImplService");
+
 
         Plan plan = planMapper.toPlan(pLanRequestDTO);
 
 
         Plan planResponse = planRepository.save(plan);
+
+
 
         return planMapper.toPlanResponseDTO(planResponse);
     }
@@ -53,6 +64,9 @@ public class PlanImplService implements PlanService {
 
         Plan plan = planRepository.findById(id)
                 .orElseThrow(()-> new PlanNoFoundException("Plan con id " + id + "no existe"));
+
+        logger.info("______ {}", plan.getDuration());
+        logger.info("_____ {}",plan.getName() );
 
         return planMapper.toPlanResponseDTO(plan);
     }
