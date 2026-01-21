@@ -5,13 +5,12 @@ import com.ClientHub.api.domain.enums.State;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
-import lombok.NonNull;
 
 
 @Getter
 @Entity
-@Table(name = "client")
-public class Client {
+@Table(name = "client") // como cambiar el nombre en la bd
+public class Costumer {
 
    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,11 +24,11 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    protected Client(){
+    protected Costumer(){
         this.state = State.INACTIVE;
     }
 
-    public Client(String name,String email){
+    public Costumer(String name, String email){
 
         this();
 

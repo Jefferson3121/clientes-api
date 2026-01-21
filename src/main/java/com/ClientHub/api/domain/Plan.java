@@ -4,10 +4,12 @@ import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.domain.enums.PlanDuration;
 import com.ClientHub.api.domain.enums.State;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Getter
@@ -26,15 +28,16 @@ public class Plan {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @Enumerated(value = EnumType.STRING)
-    private PlanDuration planDuration;
+    @Enumerated(value = EnumType.STRING) @NotNull
+    @Column(name = "plan_duration")
+    private PlanDuration duration;
 
     protected Plan(){
         this.state = State.INACTIVE;
     }
 
 
-    public Plan(String name, BigDecimal price, PlanDuration planDuration){
+    public Plan(String name, BigDecimal price, PlanDuration duration){
 
         this();
 
@@ -43,7 +46,7 @@ public class Plan {
 
         this.name = name;
         this.price = price;
-        this.planDuration = planDuration;
+        this.duration = duration;
     }
 
     public void modifyName(String newName){
