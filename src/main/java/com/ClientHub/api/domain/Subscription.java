@@ -17,7 +17,7 @@ public class Subscription {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
-    private Client client;
+    private Costumer costumer;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plan_id")
@@ -37,13 +37,13 @@ public class Subscription {
         this.state = StateSubscription.ACTIVE;
     }
 
-    public Subscription(Plan plan, Client client){
+    public Subscription(Plan plan, Costumer costumer){
         this();
 
-        if (plan == null || client == null) throw new NullPointerException("client o plan son null");
+        if (plan == null || costumer == null) throw new NullPointerException("costumer o plan son null");
 
         this.plan = plan;
-        this.client = client;
+        this.costumer = costumer;
     }
 
 
@@ -99,9 +99,14 @@ public class Subscription {
 
     public void calculateEndDate(){
 
-        if (this.plan.getPlanDuration() == PlanDuration.MONTLY){
+        if (plan.getDuration() == null) {
+            throw new IllegalStateException("Duración de plan  no inicializados");
+        }
+
+
+        if (this.plan.getDuration() == PlanDuration.MONTLY){
             this.dateEnd = dateStar.plusMonths(1);
-        } else if (this.plan.getPlanDuration() == PlanDuration.ANNUAL) {
+        } else if (this.plan.getDuration() == PlanDuration.ANNUAL) {
             this.dateEnd = this.dateStar.plusYears(1);
         }
     }
