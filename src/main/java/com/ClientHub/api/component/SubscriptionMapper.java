@@ -16,7 +16,7 @@ public interface SubscriptionMapper {
 
     Subscription toSubscription(SubscriptionRequestDTO subscriptionRequestDTO);
 
-    @Mapping(source = "client.id", target = "clientId")
+    @Mapping(source = "costumer.id", target = "costumerId")
     @Mapping(source = "plan.id", target = "planId")
     SubscriptionResponseDTO toSubscriptionResponseDTO(Subscription subscription);
 }

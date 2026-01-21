@@ -5,6 +5,7 @@ import com.ClientHub.api.dto.response.PlanResponseDTO;
 import com.ClientHub.api.domain.Plan;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(
         componentModel = "spring",
@@ -12,6 +13,7 @@ import org.mapstruct.Mapper;
 public interface PlanMapper {
 
     Plan toPlan(PLanRequestDTO pLanRequestDTO);
+
 
     PlanResponseDTO toPlanResponseDTO(Plan plan);
 }
