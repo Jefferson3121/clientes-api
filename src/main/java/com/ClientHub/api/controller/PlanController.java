@@ -5,6 +5,8 @@ import com.ClientHub.api.dto.response.PlanResponseDTO;
 import com.ClientHub.api.service.PlanService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +41,9 @@ public class PlanController {
         return ResponseEntity.status(HttpStatus.OK).body(plan);
     }
 
-    @PatchMapping("/{id}/name")
-    public ResponseEntity<Void> changePlanName(@PathVariable int id,@Valid @NotBlank String newEmail){
-        planService.changePlanName(id, newEmail);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
 
     @PatchMapping("/{id}/price")
-    public ResponseEntity<Void> chagePlanPrice( @PathVariable int id, @NotBlank BigDecimal price){
+    public ResponseEntity<Void> changePlanPrice( @PathVariable int id, @NotNull @Positive @RequestBody BigDecimal price){
         planService.changePlanPrice(id, price);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
