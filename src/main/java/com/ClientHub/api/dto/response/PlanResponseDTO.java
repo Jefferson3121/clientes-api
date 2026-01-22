@@ -5,4 +5,4 @@ import com.ClientHub.api.domain.enums.State;
 
 import java.math.BigDecimal;
 
-public record PlanResponseDTO(int id, String name, BigDecimal price, State state, PlanDuration planDuration) { }
+public record PlanResponseDTO(int id, String name, BigDecimal price, State state, PlanDuration duration) { }
