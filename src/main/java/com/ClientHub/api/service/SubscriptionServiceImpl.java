@@ -1,7 +1,7 @@
 package com.ClientHub.api.service;
 
 import com.ClientHub.api.component.SubscriptionMapper;
-import com.ClientHub.api.domain.Client;
+import com.ClientHub.api.domain.Costumer;
 import com.ClientHub.api.domain.Plan;
 import com.ClientHub.api.domain.Subscription;
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 @Service
 @RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService{
@@ -26,17 +24,18 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     private final PlanRepository planRepository;
     private final SubscriptionMapper subscriptionMapper;
 
+    @Transactional
     @Override
     public SubscriptionResponseDTO createSubscription(SubscriptionRequestDTO subscriptionRequest){
 
-        Client client = clientRepository.findById(subscriptionRequest.clienteId())
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d no existe", subscriptionRequest.clienteId())));
+        Costumer costumer = clientRepository.findById(subscriptionRequest.costumerId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d no existe", subscriptionRequest.costumerId())));
 
         Plan plan = planRepository.findById(subscriptionRequest.planId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Plan con id: %d no existe", subscriptionRequest.planId())));
 
 
-        Subscription subscription = new Subscription(plan, client);
+        Subscription subscription = new Subscription(plan, costumer);
 
        Subscription subscriptionResponse = subscriptionRepository.save(subscription);
 
@@ -50,8 +49,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
         Subscription subscription = getSUbscriptionOfRepository(id);
 
-        if (!subscription.isActive()) {
-            throw new IllegalStateException("No puede eliinar una etidad Subscription que este en estado ACTIVE");
+        if (subscription.isActive()) {
+            throw new IllegalStateException("No puede eliminar una subscripcion que este en estado ACTIVE");
         }
 
         subscriptionRepository.delete(subscription);
@@ -91,8 +90,9 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     }
 
 
+    @Transactional(readOnly = true)
     private Subscription getSUbscriptionOfRepository(Integer id) {
-        
+
         return subscriptionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Entidad con id:%d no existe", id)));
     }
