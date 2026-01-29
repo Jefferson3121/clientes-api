@@ -30,16 +30,8 @@ public class PlanImplService implements PlanService {
     @Override
     public PlanResponseDTO add(PLanRequestDTO pLanRequestDTO) {
 
-        logger.info("ENTRÉ AL MÉTODO PlanImplService");
-
-
         Plan plan = planMapper.toPlan(pLanRequestDTO);
-
-
         Plan planResponse = planRepository.save(plan);
-
-
-
         return planMapper.toPlanResponseDTO(planResponse);
     }
 
@@ -78,14 +70,11 @@ public class PlanImplService implements PlanService {
 
         validateId(id);
 
-
-
         Plan plan = planRepository.findById(id)
                 .orElseThrow(()-> new PlanNoFoundException("No existe el plan que intenta modificar"));
 
 
         if (newName == plan.getName()){
-
             throw new UnchangedValueException("Nuevo name es igual a name actual");
         }
 
@@ -132,4 +121,3 @@ public class PlanImplService implements PlanService {
     }
 
 }
-
