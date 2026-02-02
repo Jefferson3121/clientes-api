@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -170,9 +171,39 @@ class PlanImplServiceTest {
         }
 
 
+        @Test
+        @DisplayName("Verify that it returns a PlanResponseDTO with the correct data")
+        public void confirmThatPLanResponseDTOReturns(){
+
+            Plan plan = new Plan("PLan compañeros de clases", new BigDecimal("4000.00"), PlanDuration.MONTLY);
+            PlanResponseDTO planResponseDTO = new PlanResponseDTO(1,"PLan compañeros de clases", new BigDecimal("4000.00"), State.ACTIVE, PlanDuration.MONTLY);
+
+
+            when(planRepository.findById(1)).thenReturn(Optional.of(plan));
+            when(planMapper.toPlanResponseDTO(any())).thenReturn(planResponseDTO);
+
+            PlanResponseDTO planResponse = planImplService.getById(1);
+
+            assertThat(planResponse).isEqualTo(planResponseDTO);
+        }
 
 
 
+        @Test
+        @DisplayName("Verify that it throws an exception when id does not exist")
+        public void confirmThatItThrowsAnExceptionWhenIdDoesNotExist(){
 
+            when(planRepository.findById(100))
+                    .thenReturn(Optional.empty());
+
+            assertThrows(PlanNoFoundException.class, () -> {
+                planImplService.getById(100);
+            });
+        }
     }
+
+
+
+
+
 }
