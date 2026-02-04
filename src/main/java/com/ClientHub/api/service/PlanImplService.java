@@ -66,21 +66,20 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public void changePlanName(int id,String newName){
+    public void changePlanName(int id, String newName) {
 
         validateId(id);
 
         Plan plan = planRepository.findById(id)
-                .orElseThrow(()-> new PlanNoFoundException("No existe el plan que intenta modificar"));
+                .orElseThrow(() -> new PlanNoFoundException("No existe el plan que intenta modificar"));
 
 
-        if (newName == plan.getName()){
+        if (newName.equals(plan.getName())) {
             throw new UnchangedValueException("Nuevo name es igual a name actual");
         }
 
         plan.modifyName(newName);
-
-         planRepository.save(plan);
+        planRepository.save(plan);
     }
 
 
@@ -112,6 +111,9 @@ public class PlanImplService implements PlanService {
         plan.modifyState();
         planRepository.save(plan);
     }
+
+
+    
 
     private void validateId(Integer id){
 
