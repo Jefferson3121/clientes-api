@@ -7,6 +7,7 @@ import com.ClientHub.api.domain.enums.State;
 import com.ClientHub.api.dto.request.PLanRequestDTO;
 import com.ClientHub.api.dto.response.PlanResponseDTO;
 import com.ClientHub.api.exception.PlanNoFoundException;
+import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.repository.PlanRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -203,6 +204,119 @@ class PlanImplServiceTest {
     }
 
 
+    @Nested
+    @DisplayName("changePlanName")
+    class ChangePLanNameTest{
+
+
+
+        @Test
+        @DisplayName("Verify that an exception is thrown when the id is incorrect")
+        public void assertThatExceptionIsThrownWhenTheIdIsIncorrect(){
+
+            assertThrows(IllegalArgumentException.class, () -> {
+                planImplService.getById(-1);
+            });
+        }
+
+
+
+
+
+        @Test
+        @DisplayName("Verify that it throws an exception when id does not exist")
+        public void confirmThatItThrowsAnExceptionWhenIdDoesNotExist(){
+
+            when(planRepository.findById(99)).thenReturn(Optional.empty());
+
+            assertThrows(PlanNoFoundException.class, ()-> {
+                planImplService.getById(99);
+            });
+        }
+
+
+        @Test
+        @DisplayName("Verify that an exception is thrown if the new name is equal to the current name")
+        public void mustThrowExcewptionWhenNameIsEqualToCurrent(){
+
+            Plan plan = new Plan("Plan de tres", new BigDecimal("80000"), PlanDuration.MONTLY);
+
+            when(planRepository.findById(any())).thenReturn(Optional.of(plan));
+
+            assertThrows(UnchangedValueException.class, () -> {
+                planImplService.changePlanName(1, "Plan de tres");
+            });
+        }
+
+
+        @Test
+        @DisplayName("Verify that the name is changed and that the changes are saved.")
+        public void mustChangeTheNameAndPersist(){
+
+            Plan plan = new Plan("PLan de tres", new BigDecimal("80000"), PlanDuration.MONTLY);
+
+            when(planRepository.findById(any())).thenReturn(Optional.of(plan));
+
+            when(planRepository.save(plan)).thenReturn(plan);
+
+            planImplService.changePlanName(1, "PLAN DE TRES");
+
+            verify(planRepository, times(1)).save(plan);
+        }
+    }
+
+
+
+
+    @Nested
+    @DisplayName("ChangePlanPrice")
+    class ChangePLanPriceTest{
+
+        @Test
+        @DisplayName("verify that the price is modified and the entity persists")
+        public void assertModifyPricePersistEntity(){
+
+            Plan plan = new Plan("PLan anual", new BigDecimal("800000"), PlanDuration.ANNUAL);
+
+
+            when(planRepository.findById(any())).thenReturn(Optional.of(plan));
+
+            when(planRepository.save(plan)).thenReturn(plan);
+
+            planImplService.changePlanPrice(1, new BigDecimal("1000000"));
+
+
+            verify(planRepository, times(1)).save(plan);
+        }
+
+
+
+        @Test
+        @DisplayName("verify that it throws an exception if the new price is less than zero")
+        public void shouldThrowExceptionIfPriceIsEqualToOrLesserThanZero(){
+
+            Plan plan = new Plan("PLn de doble pelis", new BigDecimal("4000"), PlanDuration.MONTLY);
+
+            assertThrows(IllegalArgumentException.class, ()->{
+                planImplService.changePlanPrice(23, new BigDecimal("-23000"));
+            });
+        }
+
+
+        @Test
+        @DisplayName("should throw an exception if the id does not exist.")
+        public void assertThatThrowsExceptionIfIdDoesNotExist(){
+
+            assertThrows(PlanNoFoundException.class, () -> {
+
+                planImplService.changePlanPrice(12, new BigDecimal("60000"));
+
+            });
+        }
+    }
+
+
+   
 
 
 
