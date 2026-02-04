@@ -316,7 +316,50 @@ class PlanImplServiceTest {
     }
 
 
-   
+    @Nested
+    @DisplayName("modifyPlanState")
+    class modifyPlanStateTest{
+
+
+        @Test
+        @DisplayName("verify that an exception is thrown if the id is invalid.")
+        public void affirmThatThrowsExceptionIfIdIsInvalid(){
+
+          assertThrows(IllegalArgumentException.class, () -> {
+              planImplService.modifyPlanState(-1);
+          });
+        }
+
+
+
+        @Test
+        @DisplayName("confirm that an exception is thrown if the id does not exist.")
+        public void shouldThrowExceptionIfIdDoesNotExist(){
+
+            when(planRepository.findById(any())).thenReturn(Optional.empty());
+
+            assertThrows(PlanNoFoundException.class, () -> {
+                planImplService.modifyPlanState(1);
+            });
+        }
+
+
+        @Test
+        @DisplayName("confirmar que se modifique el state y se persista la entidad")
+        public void deberiaHaberUnaInteraccionConRepositorySave(){
+
+            Plan plan = new Plan("PLan de prueba numero 2", new BigDecimal("80000"), PlanDuration.MONTLY);
+
+            when(planRepository.findById(any())).thenReturn(Optional.of(plan));
+
+            planImplService.modifyPlanState(1);
+
+            verify(planRepository, times(1)).save(plan);
+        }
+
+
+
+    }
 
 
 
