@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/plan")
 public class PlanController {
 
