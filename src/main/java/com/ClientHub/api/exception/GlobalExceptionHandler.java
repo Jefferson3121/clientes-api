@@ -23,12 +23,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @ExceptionHandler(ClientAlreadyExistsException.class)
-    public ResponseEntity<ResponseError> checkIfClientExists(ClientAlreadyExistsException ex){
 
-        ResponseError error = new ResponseError(HttpStatus.CONFLICT.value(), ex.getMessage(),LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
 
     @ExceptionHandler(UnchangedValueException.class)
     public ResponseEntity<ResponseError> UnchangedValueException(UnchangedValueException ex){
@@ -38,12 +33,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(PlanNoFoundException.class)
-    public ResponseEntity<ResponseError> handlerPlanNoFoundException(PlanNoFoundException ex){
 
-        ResponseError error = new ResponseError(HttpStatus.NOT_FOUND.value(), ex.getMessage(),LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
 
 
     @ExceptionHandler(NullPointerException.class)
@@ -54,15 +44,6 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseError> handleValidation(MethodArgumentNotValidException ex) {
-
-        FieldError error = ex.getFieldError();
-
-        ResponseError errorRespone = new ResponseError(HttpStatus.BAD_REQUEST.value(),String.format("El campo %s %s", error.getField(), error.getDefaultMessage()), LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRespone);
-    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseError> handlerIlegalArgument(IllegalArgumentException ex){
@@ -70,24 +51,5 @@ public class GlobalExceptionHandler {
         ResponseError error = new ResponseError(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), LocalDateTime.now());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ResponseError> handlerMethodNotNotAllowed(HttpRequestMethodNotSupportedException ex){
-
-        String message = String.format("%s, Allowed: %s ", ex.getMessage(), ex.getSupportedHttpMethods());
-
-        ResponseError error = new ResponseError(HttpStatus.METHOD_NOT_ALLOWED.value(),message, LocalDateTime.now() );
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ResponseError> handlerMessageNotReadable(HttpMessageNotReadableException ex){
-
-        ResponseError error = new ResponseError(HttpStatus.BAD_REQUEST.value(), ex.getMostSpecificCause().getMessage(),LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-
     }
 }

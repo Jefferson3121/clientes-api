@@ -325,6 +325,10 @@ class PlanImplServiceTest {
         @DisplayName("verify that an exception is thrown if the id is invalid.")
         public void affirmThatThrowsExceptionIfIdIsInvalid(){
 
+            String lala = "ksjksdj";
+
+            lala.length()
+
           assertThrows(IllegalArgumentException.class, () -> {
               planImplService.modifyPlanState(-1);
           });
