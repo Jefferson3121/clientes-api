@@ -1,12 +1,12 @@
 package com.ClientHub.api.service;
 
 import com.ClientHub.api.component.ClientMapper;
+import com.ClientHub.api.domain.Customer;
 import com.ClientHub.api.dto.request.ClientRequestChangeEmailDTO;
 import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
 import com.ClientHub.api.exception.ClientAlreadyExistsException;
-import com.ClientHub.api.domain.Costumer;
 import com.ClientHub.api.repository.ClientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +28,9 @@ public class ClientServiceImpl implements ClientService {
                     String.format("Cliente con el email %s ya existe", clientRequestDTO.email()));
         }
 
-        Costumer costumer = clientMapper.toClient(clientRequestDTO);
+        Customer customer = clientMapper.toClient(clientRequestDTO);
 
-        clientRepository.save(costumer);
+        clientRepository.save(customer);
 
     }
 
@@ -39,8 +39,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponseDTO getByIdClient(Integer id) {
 
-        Costumer costumer = getClientId(id);
-        return clientMapper.toClientResponseDTO(costumer);
+        Customer customer = getClientId(id);
+        return clientMapper.toClientResponseDTO(customer);
     }
 
 
@@ -48,9 +48,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void updateClientName(int id, ClientRequestChangeNameDTO changeNameDTO){
 
-        Costumer costumer = getClientId(id);
+        Customer customer = getClientId(id);
 
-        costumer.updateName(changeNameDTO.newName());
+        customer.updateName(changeNameDTO.newName());
 
     }
 
@@ -59,23 +59,23 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void updateClientEmail(int id, ClientRequestChangeEmailDTO clientRequestChangeEmailDTO){
 
-        Costumer costumer = getClientId(id);
+        Customer customer = getClientId(id);
 
-        if (clientRequestChangeEmailDTO.newEmail().equals(costumer.getEmail())){
+        if (clientRequestChangeEmailDTO.newEmail().equals(customer.getEmail())){
             throw new IllegalArgumentException("Email no puede ser igual a el email actual");
         }
 
-        costumer.updateEmail(clientRequestChangeEmailDTO.newEmail());
-        clientRepository.save(costumer);
+        customer.updateEmail(clientRequestChangeEmailDTO.newEmail());
+        clientRepository.save(customer);
     }
 
     @Transactional
     @Override
     public void updateClientState(int id){
 
-        Costumer costumer = getClientId(id);
+        Customer customer = getClientId(id);
 
-        costumer.updateState();
+        customer.updateState();
 
 
     }
@@ -84,7 +84,7 @@ public class ClientServiceImpl implements ClientService {
 
 
 
-    private Costumer getClientId(Integer id) {
+    private Customer getClientId(Integer id) {
 
         if (id < 0){
             throw new IllegalArgumentException(String.format("Formato o valor de id incorrecto"));

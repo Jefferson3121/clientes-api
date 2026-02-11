@@ -17,7 +17,7 @@ public class Subscription {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
-    private Costumer costumer;
+    private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "plan_id")
@@ -37,13 +37,13 @@ public class Subscription {
         this.state = StateSubscription.ACTIVE;
     }
 
-    public Subscription(Plan plan, Costumer costumer){
+    public Subscription(Plan plan, Customer customer){
         this();
 
-        if (plan == null || costumer == null) throw new NullPointerException("costumer o plan son null");
+        if (plan == null || customer == null) throw new NullPointerException("customer o plan son null");
 
         this.plan = plan;
-        this.costumer = costumer;
+        this.customer = customer;
     }
 
 

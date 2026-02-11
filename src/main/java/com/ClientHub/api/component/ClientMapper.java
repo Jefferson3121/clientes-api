@@ -1,6 +1,6 @@
 package com.ClientHub.api.component;
 
-import com.ClientHub.api.domain.Costumer;
+import com.ClientHub.api.domain.Customer;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
 import org.mapstruct.InjectionStrategy;
@@ -16,7 +16,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface ClientMapper{
 
-    Costumer toClient(ClientRequestDTO clientRequestDTO);
+    Customer toClient(ClientRequestDTO clientRequestDTO);
 
-    ClientResponseDTO toClientResponseDTO(Costumer costumer);
+    ClientResponseDTO toClientResponseDTO(Customer customer);
 }

@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "client") // como cambiar el nombre en la bd
-public class Costumer {
+public class Customer {
 
    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,11 +24,11 @@ public class Costumer {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    protected Costumer(){
+    protected Customer(){
         this.state = State.INACTIVE;
     }
 
-    public Costumer(String name, String email){
+    public Customer(String name, String email){
 
         this();
 

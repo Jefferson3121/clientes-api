@@ -1,7 +1,7 @@
 package com.ClientHub.api.service;
 
 import com.ClientHub.api.component.SubscriptionMapper;
-import com.ClientHub.api.domain.Costumer;
+import com.ClientHub.api.domain.Customer;
 import com.ClientHub.api.domain.Plan;
 import com.ClientHub.api.domain.Subscription;
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
@@ -28,14 +28,14 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Override
     public SubscriptionResponseDTO createSubscription(SubscriptionRequestDTO subscriptionRequest){
 
-        Costumer costumer = clientRepository.findById(subscriptionRequest.costumerId())
+        Customer customer = clientRepository.findById(subscriptionRequest.costumerId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d no existe", subscriptionRequest.costumerId())));
 
         Plan plan = planRepository.findById(subscriptionRequest.planId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Plan con id: %d no existe", subscriptionRequest.planId())));
 
 
-        Subscription subscription = new Subscription(plan, costumer);
+        Subscription subscription = new Subscription(plan, customer);
 
        Subscription subscriptionResponse = subscriptionRepository.save(subscription);
 
