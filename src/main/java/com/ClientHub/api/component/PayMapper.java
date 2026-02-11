@@ -5,9 +5,12 @@ import com.ClientHub.api.domain.Pay;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        unmappedSourcePolicy = ReportingPolicy.WARN,
+        unmappedTargetPolicy = ReportingPolicy.WARN
 )
 public interface PayMapper {
 
