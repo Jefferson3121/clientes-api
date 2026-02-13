@@ -22,12 +22,12 @@ public class PayServiceImpl implements PayService{
     private final PayMapper payMapper;
 
     @Override
-    public PayResponseDTO makePay(MakePayRequest makePayRequest){
+    public PayResponseDTO createPay(MakePayRequest makePayRequest){
 
         Subscription subscription = susbcriptionRepsitory.findById(makePayRequest.susbriptionId())
                 .orElseThrow(() -> new EntityNotFoundException("Entidad no encontrada"));
 
-        Pay pay = new Pay(subscription, makePayRequest.valuePay());
+        Pay pay = Pay.create(subscription, makePayRequest.valuePay());
 
         Pay payResponse = payRepository.save(pay);
 

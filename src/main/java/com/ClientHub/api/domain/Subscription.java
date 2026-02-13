@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -62,9 +63,7 @@ public class Subscription {
         return this.state == StateSubscription.EXPIRED;
     }
 
-    public boolean isCancelled(){
-        return this.state == StateSubscription.EXPIRED;
-    }
+    public boolean isCancelled(){return this.state == StateSubscription.CANCELLED;}
 
     public void activate(){
         if (isActive()){
@@ -111,6 +110,24 @@ public class Subscription {
         }
     }
 
+
+
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this) return true;
+
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+
+        Subscription subscription = (Subscription) obj;
+
+        return Objects.equals(this.id, subscription.id);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hashCode(id);
+    }
 
 
 

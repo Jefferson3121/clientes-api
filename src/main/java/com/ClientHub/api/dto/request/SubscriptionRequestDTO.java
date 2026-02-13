@@ -2,5 +2,5 @@ package com.ClientHub.api.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-public record SubscriptionRequestDTO(@NotNull Integer costumerId, @NotNull Integer planId) {
+public record SubscriptionRequestDTO(@NotNull Integer customerId, @NotNull Integer planId) {
 }

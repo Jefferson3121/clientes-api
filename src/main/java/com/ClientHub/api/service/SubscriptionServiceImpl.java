@@ -28,8 +28,8 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Override
     public SubscriptionResponseDTO createSubscription(SubscriptionRequestDTO subscriptionRequest){
 
-        Customer customer = clientRepository.findById(subscriptionRequest.costumerId())
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d no existe", subscriptionRequest.costumerId())));
+        Customer customer = clientRepository.findById(subscriptionRequest.customerId())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d no existe", subscriptionRequest.customerId())));
 
         Plan plan = planRepository.findById(subscriptionRequest.planId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Plan con id: %d no existe", subscriptionRequest.planId())));

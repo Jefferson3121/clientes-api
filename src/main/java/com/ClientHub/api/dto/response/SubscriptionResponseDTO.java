@@ -4,5 +4,5 @@ import com.ClientHub.api.domain.enums.StateSubscription;
 
 import java.time.LocalDate;
 
-public record SubscriptionResponseDTO(int id, int costumerId, int planId, LocalDate dateStartm, LocalDate dateEnd, StateSubscription stateSubscription) {
+public record SubscriptionResponseDTO(int id, int customerId, int planId, LocalDate dateStartm, LocalDate dateEnd, StateSubscription stateSubscription) {
 }

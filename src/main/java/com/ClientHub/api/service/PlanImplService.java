@@ -28,7 +28,7 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public PlanResponseDTO add(PLanRequestDTO pLanRequestDTO) {
+    public PlanResponseDTO createPlan(PLanRequestDTO pLanRequestDTO) {
 
         Plan plan = planMapper.toPlan(pLanRequestDTO);
         Plan planResponse = planRepository.save(plan);
@@ -39,7 +39,7 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public void delete(int id){
+    public void deletePlan(int id){
 
         validateId(id);
 
@@ -51,7 +51,7 @@ public class PlanImplService implements PlanService {
 
     @Transactional(readOnly = true)
     @Override
-    public PlanResponseDTO getById(int id){
+    public PlanResponseDTO getPlanById(int id){
         validateId(id);
 
         Plan plan = planRepository.findById(id)
@@ -75,7 +75,7 @@ public class PlanImplService implements PlanService {
 
 
         if (newName.equals(plan.getName())) {
-            throw new UnchangedValueException("Nuevo name es igual a name actual");
+            throw new UnchangedValueException("Nuevo nombre es igual a nombre actual");
         }
 
         plan.modifyName(newName);
@@ -85,10 +85,10 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public void changePlanPrice(int id,BigDecimal price){
+    public void updatePlanPrice(int id, BigDecimal price){
 
         if (price.compareTo(BigDecimal.ZERO) <= 0){
-            throw new IllegalArgumentException("Price no puede ser inferior o igual a cero (0)");
+            throw new IllegalArgumentException("Precio no puede ser inferior o igual a cero (0)");
         }
 
         Plan plan = planRepository.findById(id)
@@ -102,7 +102,7 @@ public class PlanImplService implements PlanService {
 
     @Transactional
     @Override
-    public void modifyPlanState(int id){
+    public void updatePlanState(int id){
         validateId(id);
 
         Plan plan = planRepository.findById(id)

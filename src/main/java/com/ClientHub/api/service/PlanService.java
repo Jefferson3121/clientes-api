@@ -7,15 +7,15 @@ import java.math.BigDecimal;
 
 public interface PlanService {
 
-    public PlanResponseDTO add(PLanRequestDTO pLanRequestDTO);
+    public PlanResponseDTO createPlan(PLanRequestDTO pLanRequestDTO);
 
-    public void delete(int id);
+    public void deletePlan(int id);
 
-    public PlanResponseDTO getById(int id);
+    public PlanResponseDTO getPlanById(int id);
 
     public void changePlanName(int id, String newName);
 
-    public void changePlanPrice(int id, BigDecimal newPrice);
+    public void updatePlanPrice(int id, BigDecimal newPrice);
 
-    public void modifyPlanState(int id);
+    public void updatePlanState(int id);
 }
