@@ -4,12 +4,10 @@ import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.domain.enums.PlanDuration;
 import com.ClientHub.api.domain.enums.State;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 
 @Getter
@@ -28,12 +26,11 @@ public class Plan {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @Enumerated(value = EnumType.STRING) @NotNull
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "plan_duration")
     private PlanDuration duration;
 
     protected Plan(){
-        this.state = State.INACTIVE;
     }
 
 
@@ -47,6 +44,7 @@ public class Plan {
         this.name = name;
         this.price = price;
         this.duration = duration;
+        this.state = State.INACTIVE;
     }
 
     public void modifyName(String newName){
@@ -88,10 +86,30 @@ public class Plan {
         }
     }
 
+
+
     private void validatePrice(BigDecimal price){
         if (price.compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("Price inavalido");
         }
+    }
+
+
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this) return true;
+
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+
+        Plan plan = (Plan) obj;
+
+        return Objects.equals(this.id, ((Plan) obj).id);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hashCode(id);
     }
 
 
