@@ -3,8 +3,9 @@ package com.ClientHub.api.domain;
 
 import com.ClientHub.api.domain.enums.State;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
+
+import java.util.Objects;
 
 
 @Getter
@@ -12,40 +13,39 @@ import lombok.Getter;
 @Table(name = "client") // como cambiar el nombre en la bd
 public class Customer {
 
-   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-   @Column(nullable = false)
+    @Column(nullable = false)
     private String name;
 
-   @Column(unique = true, nullable = false) @Email
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private State state;
 
-    protected Customer(){
-        this.state = State.INACTIVE;
+    protected Customer() {
     }
 
-    public Customer(String name, String email){
-
-        this();
+    public Customer(String name, String email) {
 
         validateString(name);
         validateString(email);
 
         this.name = name;
         this.email = email;
+        this.state = State.INACTIVE;
     }
 
 
-    public void updateName(String name){
+    public void updateName(String name) {
 
         validateString(name);
-        validateState();
+        ensureIsInactive();
 
-        if (this.name.equals(name)){
+        if (this.name.equals(name)) {
             throw new IllegalArgumentException("No puede ingresar el nombre actual del usuario");
         }
 
@@ -56,7 +56,7 @@ public class Customer {
     public void updateEmail(String newEmail){
 
         validateString(newEmail);
-        validateState();
+        ensureIsInactive();
 
         if (this.email.equals(newEmail)){
             throw new IllegalArgumentException("Nuevo email no puede ser igual a email actual");
@@ -75,7 +75,7 @@ public class Customer {
     }
 
 
-    private void validateState(){
+    private void ensureIsInactive(){
 
         if (state != State.INACTIVE){
             throw new IllegalStateException("Estado de la entidad invalido para esta operacion");
@@ -86,5 +86,22 @@ public class Customer {
         if (string == null || string.isBlank()){
             throw new IllegalArgumentException("Valor invalido");
         }
+    }
+
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this) return true;
+
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+
+        Customer customer = (Customer) obj;
+
+        return Objects.equals(this.id, customer.id);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hashCode(id);
     }
 }
