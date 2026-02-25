@@ -55,7 +55,7 @@ public class PlanImplService implements PlanService {
         validateId(id);
 
         Plan plan = planRepository.findById(id)
-                .orElseThrow(()-> new PlanNoFoundException("Plan con id " + id + "no existe"));
+                .orElseThrow(()-> new PlanNoFoundException("Plan con id " + id + " no existe"));
 
         logger.info("______ {}", plan.getDuration());
         logger.info("_____ {}",plan.getName() );
@@ -106,7 +106,7 @@ public class PlanImplService implements PlanService {
         validateId(id);
 
         Plan plan = planRepository.findById(id)
-                .orElseThrow(()-> new PlanNoFoundException("Plan con id " + id + "no existe"));
+                .orElseThrow(()-> new PlanNoFoundException("Plan con id " + id + " no existe"));
 
         plan.modifyState();
         planRepository.save(plan);

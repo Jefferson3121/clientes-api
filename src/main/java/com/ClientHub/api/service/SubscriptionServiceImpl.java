@@ -94,7 +94,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     private Subscription getSUbscriptionOfRepository(Integer id) {
 
         return subscriptionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Entidad con id:%d no existe", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Entidad con id: %d no existe", id)));
     }
 }
 

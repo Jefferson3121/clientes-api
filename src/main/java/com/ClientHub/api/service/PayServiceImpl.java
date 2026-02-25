@@ -3,7 +3,7 @@ package com.ClientHub.api.service;
 import com.ClientHub.api.component.PayMapper;
 import com.ClientHub.api.domain.Pay;
 import com.ClientHub.api.domain.Subscription;
-import com.ClientHub.api.dto.request.MakePayRequest;
+import com.ClientHub.api.dto.request.CreatePayRequestDTO;
 import com.ClientHub.api.dto.response.PayResponseDTO;
 import com.ClientHub.api.repository.PayRepository;
 import com.ClientHub.api.repository.SubscriptionRepository;
@@ -22,12 +22,12 @@ public class PayServiceImpl implements PayService{
     private final PayMapper payMapper;
 
     @Override
-    public PayResponseDTO createPay(MakePayRequest makePayRequest){
+    public PayResponseDTO createPay(CreatePayRequestDTO createPayRequestDTO){
 
-        Subscription subscription = susbcriptionRepsitory.findById(makePayRequest.susbriptionId())
+        Subscription subscription = susbcriptionRepsitory.findById(createPayRequestDTO.susbriptionId())
                 .orElseThrow(() -> new EntityNotFoundException("Entidad no encontrada"));
 
-        Pay pay = Pay.create(subscription, makePayRequest.valuePay());
+        Pay pay = Pay.create(subscription, createPayRequestDTO.valuePay());
 
         Pay payResponse = payRepository.save(pay);
 

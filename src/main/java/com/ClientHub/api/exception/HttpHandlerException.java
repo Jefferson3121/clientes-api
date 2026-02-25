@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
-public class HttpHanlderException {
+public class HttpHandlerException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseError> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ResponseError> handlerValidation(MethodArgumentNotValidException ex) {
 
         FieldError error = ex.getFieldError();
 
@@ -46,14 +46,5 @@ public class HttpHanlderException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 
-    }
-
-
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ResponseError> handlerRequestMethodNoSupported(HttpRequestMethodNotSupportedException ex){
-
-        ResponseError error = new ResponseError(HttpStatus.METHOD_NOT_ALLOWED.value(), ex.getMessage(), LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
     }
 }

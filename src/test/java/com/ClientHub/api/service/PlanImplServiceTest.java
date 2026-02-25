@@ -160,10 +160,10 @@ class PlanImplServiceTest {
 
     @Nested()
     @DisplayName("getById")
-    class GetByIdTes{
+    class GetByIdTes{// --> Corregir nombre , de ...Tes a ...Test
 
         @Test
-        @DisplayName("should throw an exception if the id does not exist ")
+        @DisplayName("should throw an exception if the id does not exist ")// Corregir mensaje de no existe a es incorrecto
         public void assertThatLaceExceptionWhenIdIsIncorrect(){
 
             assertThrows(IllegalArgumentException.class, () -> {
