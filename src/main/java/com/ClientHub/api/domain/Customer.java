@@ -77,7 +77,7 @@ public class Customer {
 
     private void ensureIsInactive(){
 
-        if (state != State.INACTIVE){
+        if (state == State.INACTIVE){
             throw new IllegalStateException("Estado de la entidad invalido para esta operacion");
         }
     }
