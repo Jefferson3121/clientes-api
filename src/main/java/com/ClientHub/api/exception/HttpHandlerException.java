@@ -8,9 +8,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
+@RestControllerAdvice
 public class HttpHanlderException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,5 +46,14 @@ public class HttpHanlderException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 
-    } 
+    }
+
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ResponseError> handlerRequestMethodNoSupported(HttpRequestMethodNotSupportedException ex){
+
+        ResponseError error = new ResponseError(HttpStatus.METHOD_NOT_ALLOWED.value(), ex.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
+    }
 }
