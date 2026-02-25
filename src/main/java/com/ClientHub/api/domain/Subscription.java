@@ -16,7 +16,7 @@ public class Subscription {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "client_id")
     private Customer customer;
 

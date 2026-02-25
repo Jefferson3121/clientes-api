@@ -19,6 +19,7 @@ public class Pay {
     @Id   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @OneToOne
     @JoinColumn(name = "suscription_id")
     private Subscription subscription;
 
