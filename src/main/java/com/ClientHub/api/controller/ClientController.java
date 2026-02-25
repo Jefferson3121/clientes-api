@@ -4,14 +4,19 @@ import com.ClientHub.api.dto.request.ClientRequestChangeEmailDTO;
 import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
+import com.ClientHub.api.dto.response.ResponseError;
 import com.ClientHub.api.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,18 +32,56 @@ public class ClientController {
 
 
     @Operation(
-            summary = "Crear un nuevo cliente",
-            description = "Crear y registrar un nuevo cliente en el sistema"
+            summary = "Registrar un nuevo cliente",
+            description = "Regitrar un nuevo cliente al sistema verificando que no exista otro",
+
+            requestBody =  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Objeto que contiene la informacion necesaria para crear un cliente",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = ClientRequestDTO.class)
+                    )
+            ),
+
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Cliente creado correctamente",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Cliente con el email proporcionado ya existe",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseError.class),
+                                    examples = @ExampleObject(
+                                            """
+                                            {
+                                              "status": 409,
+                                              "message": "Cliente con el email emaildecliente@gmail.com ya existe",
+                                              "timestamp": "2026-02-15T11:41:39.9371288"
+                                            }
+                                            """
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Peticion incorrecta"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
     )
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Cliente creado correctamente"),
-            @ApiResponse(responseCode = "409", description = "Cliente ya existe"),
-            @ApiResponse(responseCode = "400", description = "peticion incorrecta")
-    })
 
     @PostMapping
-    public ResponseEntity<Void> registerClient(@Valid @RequestBody ClientRequestDTO clientRequestDTO){
+    public ResponseEntity<Void> registerClient(
+
+            @Valid @RequestBody ClientRequestDTO clientRequestDTO) {
 
         clientService.registerClient(clientRequestDTO);
 
@@ -47,42 +90,180 @@ public class ClientController {
 
 
 
-@Operation(
-        summary = "Obtener un cliente",
-        description = "Obtener un cliente por su id"
-)
 
 
-@ApiResponses(
-        @ApiResponse(responseCode = "200", description = "Cuerpo de Client en formato Json")
-)
+
+
+    @Operation(
+            summary = "Obtener un cliente",
+            description = "Obtener un cliente por su id",
+
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cuerpo de Client con sus datos en formato Json"
+                    ),
+                    @ApiResponse(responseCode = "404",
+                            description = "Cliente no encontrado"
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "Id incorrecto"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+
+            }
+    )
+
+
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> getByIdClient(@PathVariable int id){
+    public ResponseEntity<ClientResponseDTO> getByIdClient(
 
+
+            @PathVariable int id) {
         ClientResponseDTO responseDTO = clientService.getByIdClient(id);
-
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
-
     }
 
-    @PatchMapping("/{id}/name")
-    public ResponseEntity<Void> updateClientName(@PathVariable int id, @Valid @RequestBody   ClientRequestChangeNameDTO clientRequestChangeNameDTO){
 
+
+
+
+
+    @Operation(
+            summary = "Actualizar nombre",
+            description = "Actualizar el nombre de un cliente",
+
+
+            requestBody =  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Nuevo nombre del cliente",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = ClientRequestChangeNameDTO.class)
+                    )
+            ),
+
+
+            responses = {
+
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Nombre actualizado correctamente"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Id invalido o datos del request icorrectoe(validacion fallida) o el nuevo nombre es igual a el nombre actual de cliente"
+                    ),      // quitar ultimo (o) cuando se cambien la excepcion que se lanza al recibir el mismo nombre al actual
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Cliente no encontrado con el id proporcionado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+                    // @ApiResponse(responseCode = "500", description = "No es posible modificar este cliente si esta inactivo"), --> Se debe mejrar dejandolo no tan generico por eso lo comento, tambien se debe mejorar la excepcion que auise lanza (IlegalStateException
+            }
+    )
+    @PatchMapping("/{id}/name")
+    public ResponseEntity<Void> updateClientName(
+            @PathVariable int id,
+            @Valid @RequestBody ClientRequestChangeNameDTO clientRequestChangeNameDTO) {
         clientService.updateClientName(id, clientRequestChangeNameDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PatchMapping("/{id}/email")
-    public ResponseEntity<Void> updateClientEmail(@PathVariable int id, @Valid @RequestBody ClientRequestChangeEmailDTO changeEmailDTO){
 
-        clientService.updateClientEmail(id,changeEmailDTO);
+
+
+
+
+
+    @Operation(
+            summary = "Actualizar email",
+            description = "Actualizar el email de un cliente",
+
+
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Nuevo email del cliente",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = ClientRequestChangeEmailDTO.class)
+                    )
+            ),
+
+
+
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Email atualizado correctamente"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "El nuevo email es igual a el email actual por ende no se puede actualizar o formato de email invalido"
+                    ),//la primera respuesta no deberia estar aqui, mejorar eso
+                    // @ApiResponse( responseCode = "409", description = "EL email ya esta usado por otro usuario") agregar mas adelante, valida que no se este permitiendo duplicados de email
+                    @ApiResponse(responseCode = "404",
+                            description = "Cliente no encontrado con el id proporcionado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+
+    @PatchMapping("/{id}/email")
+    public ResponseEntity<Void> updateClientEmail(
+
+            @PathVariable int id,
+            @Valid @RequestBody ClientRequestChangeEmailDTO changeEmailDTO) {
+
+        clientService.updateClientEmail(id, changeEmailDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
+
+
+
+
+
+    @Operation(
+            summary = "Actualizar estado de un cliente",
+            description = "Cambia el estado lógico del cliente (activo/inactivo) según reglas del negocio",
+
+
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "State del cliente actualizado correctamente"
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Id inalido o petición mal formada"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Cliente no encontrado con el id proporcionado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+
+
+
+
     @PatchMapping("/{id}/state")
-    public ResponseEntity<Void> updateClientState(@PathVariable int id){
+    public ResponseEntity<Void> updateClientState(@PathVariable int id) {
         validateId(id); // revisar aqui de que pasa cuando es int primitivo y no se le envia valor ya que no podemos validar null
         clientService.updateClientState(id);
 
@@ -91,7 +272,8 @@ public class ClientController {
 
 
 
-    private void validateId(Integer id){
+
+    private void validateId(Integer id) {
         Objects.requireNonNull(id, "El id no puede ser null");
     }
 }
