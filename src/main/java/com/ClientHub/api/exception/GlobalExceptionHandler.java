@@ -52,4 +52,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ResponseError> handlerIllegalStateException(IllegalStateException ex){
+
+        ResponseError error = new ResponseError(HttpStatus.CONFLICT.value(), ex.getMessage(), LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 }
