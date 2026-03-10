@@ -7,6 +7,7 @@ import com.ClientHub.api.exception.PlanNoFoundException;
 import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.domain.Plan;
 import com.ClientHub.api.repository.PlanRepository;
+import com.ClientHub.api.service.contrat.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,12 @@ import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
-public class PlanImplService implements PlanService {
+public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;
     private final PlanMapper planMapper;
 
-    public static final Logger logger = LoggerFactory.getLogger(PlanImplService.class);
+    public static final Logger logger = LoggerFactory.getLogger(PlanServiceImpl.class);
 
     @Transactional
     @Override
@@ -65,7 +66,6 @@ public class PlanImplService implements PlanService {
 
 
     @Transactional
-    @Override
     public void changePlanName(int id, String newName) {
 
         validateId(id);

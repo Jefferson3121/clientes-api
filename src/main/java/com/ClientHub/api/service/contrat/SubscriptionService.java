@@ -13,8 +13,6 @@ public interface SubscriptionService {
 
     public void cancelSubscription(Integer id);
 
-   // public void cancelSubscriptionAutomatically();
-
     public void renewSubscription(Integer id);
 
 

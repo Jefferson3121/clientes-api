@@ -65,13 +65,12 @@ public class Customer {
         this.email = newEmail;
     }
 
+    public void activate(){
+        this.state = State.ACTIVE;
+    }
 
-    public  void updateState(){
-        if (this.state == State.INACTIVE){
-            this.state = State.ACTIVE;
-        }else {
-            this.state = State.INACTIVE;
-        }
+    public void deactivate(){
+        this.state = State.INACTIVE;
     }
 
 

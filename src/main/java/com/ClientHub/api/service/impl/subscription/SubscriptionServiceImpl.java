@@ -6,9 +6,10 @@ import com.ClientHub.api.domain.Plan;
 import com.ClientHub.api.domain.Subscription;
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
 import com.ClientHub.api.dto.response.SubscriptionResponseDTO;
-import com.ClientHub.api.repository.ClientRepository;
+import com.ClientHub.api.repository.CustomerRepository;
 import com.ClientHub.api.repository.PlanRepository;
 import com.ClientHub.api.repository.SubscriptionRepository;
+import com.ClientHub.api.service.contrat.SubscriptionService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class SubscriptionServiceImpl implements SubscriptionService{
+public class SubscriptionServiceImpl implements SubscriptionService {
 
 
     private final SubscriptionRepository subscriptionRepository;
-    private final ClientRepository clientRepository;
+    private final CustomerRepository customerRepository;
     private final PlanRepository planRepository;
     private final SubscriptionMapper subscriptionMapper;
 
@@ -28,7 +29,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
     @Override
     public SubscriptionResponseDTO createSubscription(SubscriptionRequestDTO subscriptionRequest){
 
-        Customer customer = clientRepository.findById(subscriptionRequest.customerId())
+        Customer customer = customerRepository.findById(subscriptionRequest.customerId())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d no existe", subscriptionRequest.customerId())));
 
         Plan plan = planRepository.findById(subscriptionRequest.planId())

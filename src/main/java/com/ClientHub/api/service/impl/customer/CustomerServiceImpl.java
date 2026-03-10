@@ -1,4 +1,4 @@
-package com.ClientHub.api.service;
+package com.ClientHub.api.service.impl;
 
 import com.ClientHub.api.component.ClientMapper;
 import com.ClientHub.api.domain.Customer;
@@ -7,7 +7,9 @@ import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
 import com.ClientHub.api.dto.response.ClientResponseDTO;
 import com.ClientHub.api.exception.ClientAlreadyExistsException;
-import com.ClientHub.api.repository.ClientRepository;
+import com.ClientHub.api.repository.CustomerRepository;
+import com.ClientHub.api.repository.SubscriptionRepository;
+import com.ClientHub.api.service.contrat.ClientService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,40 +17,58 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ClientServiceImpl implements ClientService {
+public class CustomerServiceImpl implements ClientService {
 
-    private final ClientRepository clientRepository;
+    private final CustomerRepository customerRepository;
+    private final SubscriptionRepository subscriptionRepository;
     private final ClientMapper clientMapper;
 
     @Override
     public void registerClient(ClientRequestDTO clientRequestDTO) {
 
-        if (clientRepository.existsByEmail(clientRequestDTO.email())) {
+        if (customerRepository.existsByEmail(clientRequestDTO.email())) {
             throw new ClientAlreadyExistsException(
                     String.format("Cliente con el email %s ya existe", clientRequestDTO.email()));
         }
 
         Customer customer = clientMapper.toClient(clientRequestDTO);
 
-        clientRepository.save(customer);
+        customerRepository.save(customer);
 
     }
 
 
+    @Transactional
+    public ClientResponseDTO deactivateCustomer(int idCustomer){
+
+        Customer customer = getCostumerId(idCustomer);
+
+        if (subscriptionRepository.existByCustomer(customer.getId())){
+
+
+        }
+
+        customer.deactivate();
+
+    }
+
+
+
+
     @Transactional(readOnly = true)
     @Override
-    public ClientResponseDTO getByIdClient(Integer id) {
+    public ClientResponseDTO getByIdCustomer(Integer id) {
 
-        Customer customer = getClientId(id);
+        Customer customer = getCostumerId(id);
         return clientMapper.toClientResponseDTO(customer);
     }
 
 
     @Transactional
     @Override
-    public void updateClientName(int id, ClientRequestChangeNameDTO changeNameDTO){
+    public void updateCustomerName(int id, ClientRequestChangeNameDTO changeNameDTO){
 
-        Customer customer = getClientId(id);
+        Customer customer = getCostumerId(id);
 
         customer.updateName(changeNameDTO.newName());
 
@@ -57,23 +77,23 @@ public class ClientServiceImpl implements ClientService {
 
     @Transactional
     @Override
-    public void updateClientEmail(int id, ClientRequestChangeEmailDTO clientRequestChangeEmailDTO){
+    public void updateCostumerEmail(int id, ClientRequestChangeEmailDTO clientRequestChangeEmailDTO){
 
-        Customer customer = getClientId(id);
+        Customer customer = getCostumerId(id);
 
         if (clientRequestChangeEmailDTO.newEmail().equals(customer.getEmail())){
             throw new IllegalArgumentException("Email no puede ser igual a el email actual");
         }
 
         customer.updateEmail(clientRequestChangeEmailDTO.newEmail());
-        clientRepository.save(customer);
+        customerRepository.save(customer);
     }
 
     @Transactional
     @Override
-    public void updateClientState(int id){
+    public void updateCostumerState(int id){
 
-        Customer customer = getClientId(id);
+        Customer customer = getCostumerId(id);
 
         customer.updateState();
 
@@ -81,16 +101,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
+    @Transactional(readOnly = true)
+    private Customer getCostumerId(Integer id) {
 
-
-
-    private Customer getClientId(Integer id) {
-
-        if (id < 0){
+        if (id < 0) {
             throw new IllegalArgumentException(String.format("Formato o valor de id incorrecto"));
         }
 
-        return clientRepository.findById(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d, no existe", id)));
     }
 }

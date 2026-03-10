@@ -13,8 +13,6 @@ public interface PlanService {
 
     public PlanResponseDTO getPlanById(int id);
 
-    public void changePlanName(int id, String newName);
-
     public void updatePlanPrice(int id, BigDecimal newPrice);
 
     public void updatePlanState(int id);

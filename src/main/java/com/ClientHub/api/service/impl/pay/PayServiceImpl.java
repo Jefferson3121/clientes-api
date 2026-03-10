@@ -7,6 +7,7 @@ import com.ClientHub.api.dto.request.CreatePayRequestDTO;
 import com.ClientHub.api.dto.response.PayResponseDTO;
 import com.ClientHub.api.repository.PayRepository;
 import com.ClientHub.api.repository.SubscriptionRepository;
+import com.ClientHub.api.service.contrat.PayService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class PayServiceImpl implements PayService{
+public class PayServiceImpl implements PayService {
 
     private final PayRepository payRepository;
     private final SubscriptionRepository susbcriptionRepsitory;
