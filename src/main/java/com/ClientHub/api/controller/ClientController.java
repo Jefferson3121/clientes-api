@@ -1,13 +1,13 @@
 package com.ClientHub.api.controller;
 
+import com.ClientHub.api.domain.enums.State;
 import com.ClientHub.api.dto.request.ClientRequestChangeEmailDTO;
 import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
-import com.ClientHub.api.dto.response.ClientResponseDTO;
+import com.ClientHub.api.dto.response.CustomerResponseDTO;
 import com.ClientHub.api.dto.response.ResponseError;
-import com.ClientHub.api.service.ClientService;
+import com.ClientHub.api.service.contrat.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,7 +28,7 @@ import java.util.Objects;
 @Tag(name = "Client", description = "Operaciones crud relacionadas con Client")
 public class ClientController {
 
-    private final ClientService clientService;
+    private final CustomerService customerService;
 
 
     @Operation(
@@ -79,11 +79,9 @@ public class ClientController {
 
 
     @PostMapping
-    public ResponseEntity<Void> registerClient(
+    public ResponseEntity<Void> registerClient(@Valid @RequestBody ClientRequestDTO clientRequestDTO) {
 
-            @Valid @RequestBody ClientRequestDTO clientRequestDTO) {
-
-        clientService.registerClient(clientRequestDTO);
+        customerService.registerClient(clientRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -96,7 +94,7 @@ public class ClientController {
 
     @Operation(
             summary = "Obtener un cliente",
-            description = "Obtener un cliente por su id",
+            description = "Obtener un cliente por el identificador unico",
 
             responses = {
                     @ApiResponse(
@@ -121,14 +119,10 @@ public class ClientController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> getByIdClient(
-
-
-            @PathVariable int id) {
-        ClientResponseDTO responseDTO = clientService.getByIdClient(id);
+    public ResponseEntity<CustomerResponseDTO> getByIdClient(@PathVariable int id) {
+        CustomerResponseDTO responseDTO = customerService.getByIdCustomer(id);
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
-
 
 
 
@@ -170,10 +164,8 @@ public class ClientController {
             }
     )
     @PatchMapping("/{id}/name")
-    public ResponseEntity<Void> updateClientName(
-            @PathVariable int id,
-            @Valid @RequestBody ClientRequestChangeNameDTO clientRequestChangeNameDTO) {
-        clientService.updateClientName(id, clientRequestChangeNameDTO);
+    public ResponseEntity<Void> updateClientName(@PathVariable int id, @Valid @RequestBody ClientRequestChangeNameDTO clientRequestChangeNameDTO) {
+        customerService.updateCustomerName(id, clientRequestChangeNameDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -224,8 +216,45 @@ public class ClientController {
             @PathVariable int id,
             @Valid @RequestBody ClientRequestChangeEmailDTO changeEmailDTO) {
 
-        clientService.updateClientEmail(id, changeEmailDTO);
+        customerService.updateCostumerEmail(id, changeEmailDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+
+
+
+    @Operation(
+            summary = "Activar cliente",
+            description = "Activa un cliente previamente inactivo mediante su identifiador unico",
+
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Cliente activado correctamente",
+                            content = @Content(
+                                    schema = @Schema(type = "string", example = "ACTIVE")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Cliente no encontrado con el id proporcionado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "El cliente ya se encuentra activo "
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor"
+                    )
+            }
+    )
+
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<State> activateCustomer(@PathVariable int id){
+
+        State stateResponse = customerService.activateCustomer(id);
+        return ResponseEntity.status(HttpStatus.OK).body(stateResponse);
     }
 
 
@@ -233,24 +262,25 @@ public class ClientController {
 
 
 
-
     @Operation(
-            summary = "Actualizar estado de un cliente",
-            description = "Cambia el estado lógico del cliente (activo/inactivo) según reglas del negocio",
-
+            summary = "Desactivar cliente",
+            description = "Desactiva un cliente activo mediante su identificador unico",
 
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "State del cliente actualizado correctamente"
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Id inalido o petición mal formada"
+                            description = "Cliente desactivado correctamente",
+                            content = @Content(
+                                    schema = @Schema(type = "string", example = "INACTIVE")
+                            )
                     ),
                     @ApiResponse(
                             responseCode = "404",
                             description = "Cliente no encontrado con el id proporcionado"
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "El cliente ya se encuentra inactivo"
                     ),
                     @ApiResponse(
                             responseCode = "500",
@@ -260,20 +290,13 @@ public class ClientController {
     )
 
 
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<State> deactivateCustomer(@PathVariable int id){
 
+        State stateResponse = customerService.deactivateCustomer(id);
 
-    @PatchMapping("/{id}/state")
-    public ResponseEntity<Void> updateClientState(@PathVariable int id) {
-        validateId(id); // revisar aqui de que pasa cuando es int primitivo y no se le envia valor ya que no podemos validar null
-        clientService.updateClientState(id);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(stateResponse);
     }
 
 
-
-
-    private void validateId(Integer id) {
-        Objects.requireNonNull(id, "El id no puede ser null");
-    }
 }

@@ -1,9 +1,10 @@
-package com.ClientHub.api.service;
+package com.ClientHub.api.service.impl.subscription;
 
 import com.ClientHub.api.component.SubscriptionMapper;
-import com.ClientHub.api.domain.Customer;
-import com.ClientHub.api.domain.Plan;
-import com.ClientHub.api.domain.Subscription;
+import com.ClientHub.api.domain.entity.Customer;
+import com.ClientHub.api.domain.entity.Plan;
+import com.ClientHub.api.domain.entity.Subscription;
+import com.ClientHub.api.domain.enums.StateSubscription;
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
 import com.ClientHub.api.dto.response.SubscriptionResponseDTO;
 import com.ClientHub.api.repository.CustomerRepository;
@@ -50,7 +51,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         Subscription subscription = getSUbscriptionOfRepository(id);
 
-        if (subscription.isActive()) {
+        if (subscription.getState() == StateSubscription.ACTIVE) {
             throw new IllegalStateException("No puede eliminar una subscripcion que este en estado ACTIVE");
         }
 
@@ -63,7 +64,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         Subscription subscription = getSUbscriptionOfRepository(id);
 
-        if (!subscription.isExpired()) {
+        if (!(subscription.getState() == StateSubscription.EXPIRED)) {
             throw new IllegalStateException("La suscripcion no esta expirada, una suscripcion debe estar en estado EXPIREDE para poder ser activada ");
         }
 
@@ -75,7 +76,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public void cancelSubscription(Integer id) {
         Subscription subscription = getSUbscriptionOfRepository(id);
-        subscription.isTrueToCancel();
+        subscription.ensureNotCancelled();
         subscription.cancel();
     }
 

@@ -1,15 +1,17 @@
-package com.ClientHub.api.service.impl;
+package com.ClientHub.api.service.impl.customer;
 
 import com.ClientHub.api.component.ClientMapper;
-import com.ClientHub.api.domain.Customer;
+import com.ClientHub.api.domain.entity.Customer;
+import com.ClientHub.api.domain.enums.State;
+import com.ClientHub.api.domain.enums.StateSubscription;
 import com.ClientHub.api.dto.request.ClientRequestChangeEmailDTO;
 import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
-import com.ClientHub.api.dto.response.ClientResponseDTO;
+import com.ClientHub.api.dto.response.CustomerResponseDTO;
 import com.ClientHub.api.exception.ClientAlreadyExistsException;
 import com.ClientHub.api.repository.CustomerRepository;
 import com.ClientHub.api.repository.SubscriptionRepository;
-import com.ClientHub.api.service.contrat.ClientService;
+import com.ClientHub.api.service.contrat.CustomerService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerServiceImpl implements ClientService {
+public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final SubscriptionRepository subscriptionRepository;
@@ -39,16 +41,38 @@ public class CustomerServiceImpl implements ClientService {
 
 
     @Transactional
-    public ClientResponseDTO deactivateCustomer(int idCustomer){
+    public State activateCustomer(int id){
+
+        Customer customer = getCostumerId(id);
+
+        if (customer.getState() == State.ACTIVE){
+            throw new IllegalStateException("El cliente ya esta activo");
+        }
+
+        customer.activate();
+
+        return customer.getState();
+    }
+
+
+    @Transactional
+    public State deactivateCustomer(int idCustomer){
 
         Customer customer = getCostumerId(idCustomer);
 
-        if (subscriptionRepository.existByCustomer(customer.getId())){
-
-
+        if (customer.getState() == State.INACTIVE){
+            throw new IllegalStateException("El cliente ya esta desactivado");
         }
 
+        if (subscriptionRepository.existByCustomer(customer.getId())){
+            throw new IllegalStateException("No se puede eliminar el cliente, existen subcripciodes asociadas a el");
+        }
+
+
+
         customer.deactivate();
+
+        return customer.getState();
 
     }
 
@@ -57,7 +81,7 @@ public class CustomerServiceImpl implements ClientService {
 
     @Transactional(readOnly = true)
     @Override
-    public ClientResponseDTO getByIdCustomer(Integer id) {
+    public CustomerResponseDTO getByIdCustomer(Integer id) {
 
         Customer customer = getCostumerId(id);
         return clientMapper.toClientResponseDTO(customer);
@@ -89,19 +113,8 @@ public class CustomerServiceImpl implements ClientService {
         customerRepository.save(customer);
     }
 
-    @Transactional
-    @Override
-    public void updateCostumerState(int id){
-
-        Customer customer = getCostumerId(id);
-
-        customer.updateState();
 
 
-    }
-
-
-    @Transactional(readOnly = true)
     private Customer getCostumerId(Integer id) {
 
         if (id < 0) {

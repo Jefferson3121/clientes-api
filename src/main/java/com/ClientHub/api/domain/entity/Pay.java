@@ -1,10 +1,9 @@
-package com.ClientHub.api.domain;
+package com.ClientHub.api.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,8 +30,7 @@ public class Pay {
 
 
     public static Pay create(Subscription subscription, BigDecimal valuePay){
-        Objects.requireNonNull(subscription, "La Susccripcion no puede ser null");
-        Objects.requireNonNull(valuePay, "EL pavlor del pago no pude ser null");
+        if (subscription == null || valuePay == null) throw new IllegalArgumentException("customer o plan son null");
 
         if (valuePay.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("El valor del pago debe ser mayor a cero");
 
@@ -43,6 +41,7 @@ public class Pay {
     public Pay(Subscription subscription, BigDecimal valuePay, LocalDate datePay){
         this.subscription = subscription;
         this.valuePay = valuePay;
+        this.datePay = datePay;
     }
 
     @Override

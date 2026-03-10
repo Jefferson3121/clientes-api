@@ -1,4 +1,4 @@
-package com.ClientHub.api.domain;
+package com.ClientHub.api.domain.entity;
 
 import com.ClientHub.api.domain.enums.PlanDuration;
 import com.ClientHub.api.domain.enums.StateSubscription;
@@ -41,7 +41,7 @@ public class Subscription {
     public Subscription(Plan plan, Customer customer){
         this();
 
-        if (plan == null || customer == null) throw new NullPointerException("customer o plan son null");
+        if (plan == null || customer == null) throw new IllegalArgumentException("customer o plan son null");
 
         this.plan = plan;
         this.customer = customer;
@@ -49,25 +49,20 @@ public class Subscription {
 
 
 
-    public void isTrueToCancel(){
-        if (isCancelled()){
+
+
+    public void ensureNotCancelled(){
+        if (this.state == StateSubscription.CANCELLED){
             throw new IllegalStateException(String.format("La suscripcion esta canecelada"));
         }
     }
 
-    public boolean isActive(){
-        return this.state == StateSubscription.ACTIVE;
-    }
 
-    public boolean isExpired(){
-        return this.state == StateSubscription.EXPIRED;
-    }
 
-    public boolean isCancelled(){return this.state == StateSubscription.CANCELLED;}
 
     public void activate(){
-        if (isActive()){
-            throw new IllegalStateException("La suscripcion ya esta activa");
+        if (this.state == StateSubscription.ACTIVE || this.state == StateSubscription.CANCELLED ){
+            throw new IllegalStateException("La susbcripcion no se puede activar, verifique su estado actual antes de intentarlo nuevamente");
         }
 
         this.state = StateSubscription.ACTIVE;
@@ -76,8 +71,8 @@ public class Subscription {
 
     public void renew(){
 
-        if (isCancelled()){
-            throw new IllegalStateException("Erro: No puede reactivar/renovar una suscripcion cancelada");
+        if (this.state == StateSubscription.CANCELLED){
+            throw new IllegalStateException("Error: No puedes reactivar/renovar una suscripcion cancelada");
         }
 
         this.state = StateSubscription.ACTIVE;

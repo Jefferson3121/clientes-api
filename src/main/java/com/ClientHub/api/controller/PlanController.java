@@ -3,9 +3,8 @@ package com.ClientHub.api.controller;
 import com.ClientHub.api.dto.request.PLanRequestDTO;
 import com.ClientHub.api.dto.response.PlanResponseDTO;
 import com.ClientHub.api.dto.response.ResponseError;
-import com.ClientHub.api.service.PlanService;
+import com.ClientHub.api.service.contrat.PlanService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -155,7 +154,7 @@ public class PlanController {
 
     )
     @PatchMapping("/{id}/price")
-    public ResponseEntity<Void> changePlanPrice( @PathVariable int id, @NotNull @Positive BigDecimal price){
+    public ResponseEntity<Void> changePlanPrice( @PathVariable int id,@RequestBody @NotNull @Positive BigDecimal price){
         planService.updatePlanPrice(id, price);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -2,9 +2,8 @@ package com.ClientHub.api.controller;
 
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
 import com.ClientHub.api.dto.response.SubscriptionResponseDTO;
-import com.ClientHub.api.service.SubscriptionService;
+import com.ClientHub.api.service.contrat.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 
-@Slf4j
+
 @RestController
 @RequestMapping("/subscription")
 @RequiredArgsConstructor
@@ -101,10 +100,6 @@ public class SubscriptionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubscription(@PathVariable Integer id) {
 
-        log.info("antes " + id);
-        validateId(id);
-        log.info("despues " + id);
-
         subscriptionService.deleteSubscription(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -137,10 +132,12 @@ public class SubscriptionController {
                     )
             }
     )
+
+
+
+
     @PatchMapping("/{id}/activate")
     public ResponseEntity<Void> activateSubscription(@PathVariable Integer id) {
-
-        validateId(id);
 
         subscriptionService.activateSubscription(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -174,10 +171,11 @@ public class SubscriptionController {
                     )
             }
     )
+
+
+
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<Void> cancelSubscription(@PathVariable Integer id) {
-
-        validateId(id);
 
         subscriptionService.cancelSubscription(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -217,19 +215,9 @@ public class SubscriptionController {
     @PatchMapping("/{id}/renew")
     public ResponseEntity<Void> renewSubscription(@PathVariable Integer id) {
 
-        validateId(id);
 
         subscriptionService.renewSubscription(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-    }
-
-
-    private void validateId(Integer id){
-        Objects.requireNonNull(id, "Id no puede ser null");
-
-        if (id <= 0){
-            throw new IllegalArgumentException(String.format("(Id = %d) id no puede ser igual o menor a cero", id));
-        }
     }
 }

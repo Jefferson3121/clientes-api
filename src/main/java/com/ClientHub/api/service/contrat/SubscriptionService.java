@@ -1,4 +1,4 @@
-package com.ClientHub.api.service;
+package com.ClientHub.api.service.contrat;
 
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
 import com.ClientHub.api.dto.response.SubscriptionResponseDTO;

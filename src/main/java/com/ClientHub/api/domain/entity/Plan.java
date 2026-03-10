@@ -1,4 +1,4 @@
-package com.ClientHub.api.domain;
+package com.ClientHub.api.domain.entity;
 
 import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.domain.enums.PlanDuration;

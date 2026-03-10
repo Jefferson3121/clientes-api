@@ -1,7 +1,7 @@
 package com.ClientHub.api.service;
 
 import com.ClientHub.api.component.PlanMapper;
-import com.ClientHub.api.domain.Plan;
+import com.ClientHub.api.domain.entity.Plan;
 import com.ClientHub.api.domain.enums.PlanDuration;
 import com.ClientHub.api.domain.enums.State;
 import com.ClientHub.api.dto.request.PLanRequestDTO;
@@ -9,6 +9,7 @@ import com.ClientHub.api.dto.response.PlanResponseDTO;
 import com.ClientHub.api.exception.PlanNoFoundException;
 import com.ClientHub.api.exception.UnchangedValueException;
 import com.ClientHub.api.repository.PlanRepository;
+import com.ClientHub.api.service.impl.plan.PlanServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class PlanImplServiceTest {
+class PlanServiceImplTest {
 
     @Mock
     private PlanRepository planRepository;
@@ -36,7 +37,7 @@ class PlanImplServiceTest {
     private PlanMapper planMapper;
 
     @InjectMocks
-    private PlanImplService planImplService;
+    private PlanServiceImpl planServiceImpl;
 
     @Nested
     @DisplayName("add()")
@@ -67,7 +68,7 @@ class PlanImplServiceTest {
             when(planRepository.save(plan)).thenReturn(plan);
             when(planMapper.toPlanResponseDTO(plan)).thenReturn(responseDTO);
 
-            planImplService.createPlan(requestDTO);
+            planServiceImpl.createPlan(requestDTO);
 
             verify(planMapper, times(1)).toPlan(any());
             verify(planRepository, times(1)).save(any(Plan.class));
@@ -104,7 +105,7 @@ class PlanImplServiceTest {
             when(planMapper.toPlanResponseDTO(any()))
                     .thenReturn(responseDTO);
 
-            PlanResponseDTO result = planImplService.createPlan(requestDTO);
+            PlanResponseDTO result = planServiceImpl.createPlan(requestDTO);
 
             assertThat(result).isNotNull();
             assertThat(result.id()).isEqualTo(1L);
@@ -125,7 +126,7 @@ class PlanImplServiceTest {
         public void ThrowExceptionIfIdIsInvalid(){
 
             assertThrows(IllegalArgumentException.class, () -> {
-                planImplService.deletePlan(-1);
+                planServiceImpl.deletePlan(-1);
             });
 
             verifyNoInteractions(planRepository);
@@ -139,7 +140,7 @@ class PlanImplServiceTest {
             when(planRepository.findById(89)).thenReturn(Optional.empty());
 
             assertThrows(PlanNoFoundException.class, () -> {
-                planImplService.deletePlan(89);
+                planServiceImpl.deletePlan(89);
             });
         }
 
@@ -151,7 +152,7 @@ class PlanImplServiceTest {
             Plan plan = new Plan("Plan familiar", new BigDecimal("600000"), PlanDuration.ANNUAL);
             when(planRepository.findById(1)).thenReturn(Optional.of(plan));
 
-            planImplService.deletePlan(1);
+            planServiceImpl.deletePlan(1);
 
             verify(planRepository).delete(plan);
         }
@@ -167,7 +168,7 @@ class PlanImplServiceTest {
         public void assertThatLaceExceptionWhenIdIsIncorrect(){
 
             assertThrows(IllegalArgumentException.class, () -> {
-                planImplService.getPlanById(-1);
+                planServiceImpl.getPlanById(-1);
             });
         }
 
@@ -183,7 +184,7 @@ class PlanImplServiceTest {
             when(planRepository.findById(1)).thenReturn(Optional.of(plan));
             when(planMapper.toPlanResponseDTO(any())).thenReturn(planResponseDTO);
 
-            PlanResponseDTO planResponse = planImplService.getPlanById(1);
+            PlanResponseDTO planResponse = planServiceImpl.getPlanById(1);
 
             assertThat(planResponse).isEqualTo(planResponseDTO);
         }
@@ -198,7 +199,7 @@ class PlanImplServiceTest {
                     .thenReturn(Optional.empty());
 
             assertThrows(PlanNoFoundException.class, () -> {
-                planImplService.getPlanById(100);
+                planServiceImpl.getPlanById(100);
             });
         }
     }
@@ -215,7 +216,7 @@ class PlanImplServiceTest {
         public void assertThatExceptionIsThrownWhenTheIdIsIncorrect(){
 
             assertThrows(IllegalArgumentException.class, () -> {
-                planImplService.getPlanById(-1);
+                planServiceImpl.getPlanById(-1);
             });
         }
 
@@ -230,7 +231,7 @@ class PlanImplServiceTest {
             when(planRepository.findById(99)).thenReturn(Optional.empty());
 
             assertThrows(PlanNoFoundException.class, ()-> {
-                planImplService.getPlanById(99);
+                planServiceImpl.getPlanById(99);
             });
         }
 
@@ -244,7 +245,7 @@ class PlanImplServiceTest {
             when(planRepository.findById(any())).thenReturn(Optional.of(plan));
 
             assertThrows(UnchangedValueException.class, () -> {
-                planImplService.changePlanName(1, "Plan de tres");
+                planServiceImpl.changePlanName(1, "Plan de tres");
             });
         }
 
@@ -259,7 +260,7 @@ class PlanImplServiceTest {
 
             when(planRepository.save(plan)).thenReturn(plan);
 
-            planImplService.changePlanName(1, "PLAN DE TRES");
+            planServiceImpl.changePlanName(1, "PLAN DE TRES");
 
             verify(planRepository, times(1)).save(plan);
         }
@@ -283,7 +284,7 @@ class PlanImplServiceTest {
 
             when(planRepository.save(plan)).thenReturn(plan);
 
-            planImplService.updatePlanPrice(1, new BigDecimal("1000000"));
+            planServiceImpl.updatePlanPrice(1, new BigDecimal("1000000"));
 
 
             verify(planRepository, times(1)).save(plan);
@@ -298,7 +299,7 @@ class PlanImplServiceTest {
             Plan plan = new Plan("PLn de doble pelis", new BigDecimal("4000"), PlanDuration.MONTLY);
 
             assertThrows(IllegalArgumentException.class, ()->{
-                planImplService.updatePlanPrice(23, new BigDecimal("-23000"));
+                planServiceImpl.updatePlanPrice(23, new BigDecimal("-23000"));
             });
         }
 
@@ -309,7 +310,7 @@ class PlanImplServiceTest {
 
             assertThrows(PlanNoFoundException.class, () -> {
 
-                planImplService.updatePlanPrice(12, new BigDecimal("60000"));
+                planServiceImpl.updatePlanPrice(12, new BigDecimal("60000"));
 
             });
         }
@@ -326,7 +327,7 @@ class PlanImplServiceTest {
         public void affirmThatThrowsExceptionIfIdIsInvalid(){
 
           assertThrows(IllegalArgumentException.class, () -> {
-              planImplService.updatePlanState(-1);
+              planServiceImpl.updatePlanState(-1);
           });
         }
 
@@ -339,7 +340,7 @@ class PlanImplServiceTest {
             when(planRepository.findById(any())).thenReturn(Optional.empty());
 
             assertThrows(PlanNoFoundException.class, () -> {
-                planImplService.updatePlanState(1);
+                planServiceImpl.updatePlanState(1);
             });
         }
 
@@ -352,7 +353,7 @@ class PlanImplServiceTest {
 
             when(planRepository.findById(any())).thenReturn(Optional.of(plan));
 
-            planImplService.updatePlanState(1);
+            planServiceImpl.updatePlanState(1);
 
             verify(planRepository, times(1)).save(plan);
         }

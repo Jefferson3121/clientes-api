@@ -1,6 +1,6 @@
 package com.ClientHub.api.component;
 
-import com.ClientHub.api.domain.Subscription;
+import com.ClientHub.api.domain.entity.Subscription;
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
 import com.ClientHub.api.dto.response.SubscriptionResponseDTO;
 import org.mapstruct.Mapper;

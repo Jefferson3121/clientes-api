@@ -1,16 +1,13 @@
-package com.ClientHub.api.service;
+package com.ClientHub.api.service.impl.plan;
 
 import com.ClientHub.api.component.PlanMapper;
 import com.ClientHub.api.dto.request.PLanRequestDTO;
 import com.ClientHub.api.dto.response.PlanResponseDTO;
 import com.ClientHub.api.exception.PlanNoFoundException;
-import com.ClientHub.api.exception.UnchangedValueException;
-import com.ClientHub.api.domain.Plan;
+import com.ClientHub.api.domain.entity.Plan;
 import com.ClientHub.api.repository.PlanRepository;
 import com.ClientHub.api.service.contrat.PlanService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +22,6 @@ public class PlanServiceImpl implements PlanService {
     private final PlanRepository planRepository;
     private final PlanMapper planMapper;
 
-    public static final Logger logger = LoggerFactory.getLogger(PlanServiceImpl.class);
 
     @Transactional
     @Override
@@ -58,9 +54,6 @@ public class PlanServiceImpl implements PlanService {
         Plan plan = planRepository.findById(id)
                 .orElseThrow(()-> new PlanNoFoundException("Plan con id " + id + " no existe"));
 
-        logger.info("______ {}", plan.getDuration());
-        logger.info("_____ {}",plan.getName() );
-
         return planMapper.toPlanResponseDTO(plan);
     }
 
@@ -73,10 +66,6 @@ public class PlanServiceImpl implements PlanService {
         Plan plan = planRepository.findById(id)
                 .orElseThrow(() -> new PlanNoFoundException("No existe el plan que intenta modificar"));
 
-
-        if (newName.equals(plan.getName())) {
-            throw new UnchangedValueException("Nuevo nombre es igual a nombre actual");
-        }
 
         plan.modifyName(newName);
         planRepository.save(plan);
@@ -117,7 +106,7 @@ public class PlanServiceImpl implements PlanService {
 
     private void validateId(Integer id){
 
-        if (id == null || id < 0){
+        if ( id < 0){
             throw new IllegalArgumentException("Formato o valor de id incorrecto");
         }
     }

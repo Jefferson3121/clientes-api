@@ -1,7 +1,7 @@
 package com.ClientHub.api.component;
 
 import com.ClientHub.api.dto.response.PayResponseDTO;
-import com.ClientHub.api.domain.Pay;
+import com.ClientHub.api.domain.entity.Pay;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

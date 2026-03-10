@@ -1,6 +1,5 @@
 package com.ClientHub.api.dto.response;
 
-import com.ClientHub.api.domain.enums.State;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(
@@ -8,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
         description = "Objeto que exponer los datos de un cliente"
 )
 
-public record ClientResponseDTO(
+public record CustomerResponseDTO(
         @Schema(
                 description = "Nombre del cliente",
                 example = "Juan Perez"
