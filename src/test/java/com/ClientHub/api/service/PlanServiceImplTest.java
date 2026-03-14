@@ -215,8 +215,8 @@ class PlanServiceImplTest {
         @DisplayName("Verify that an exception is thrown when the id is incorrect")
         public void assertThatExceptionIsThrownWhenTheIdIsIncorrect(){
 
-            assertThrows(IllegalArgumentException.class, () -> {
-                planServiceImpl.getPlanById(-1);
+            assertThrows(PlanNoFoundException.class, () -> {
+                planServiceImpl.changePlanName(12, "Nuevo nombre");
             });
         }
 
