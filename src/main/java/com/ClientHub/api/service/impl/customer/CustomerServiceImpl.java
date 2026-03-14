@@ -3,7 +3,6 @@ package com.ClientHub.api.service.impl.customer;
 import com.ClientHub.api.component.ClientMapper;
 import com.ClientHub.api.domain.entity.Customer;
 import com.ClientHub.api.domain.enums.State;
-import com.ClientHub.api.domain.enums.StateSubscription;
 import com.ClientHub.api.dto.request.ClientRequestChangeEmailDTO;
 import com.ClientHub.api.dto.request.ClientRequestChangeNameDTO;
 import com.ClientHub.api.dto.request.ClientRequestDTO;
@@ -64,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalStateException("El cliente ya esta desactivado");
         }
 
-        if (subscriptionRepository.existByCustomer(customer.getId())){
+        if (subscriptionRepository.existsByCustomerId(customer.getId())){
             throw new IllegalStateException("No se puede eliminar el cliente, existen subcripciodes asociadas a el");
         }
 
