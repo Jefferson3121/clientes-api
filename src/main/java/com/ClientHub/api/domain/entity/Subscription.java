@@ -13,6 +13,8 @@ import java.util.Objects;
 @Table(name = "subscription")
 public class Subscription {
 
+    //Se deben trasladar las validaciondes de reglas de negocio del domino al domino (no dejarlas en el servicio o casos de uso )
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -34,17 +36,15 @@ public class Subscription {
     private StateSubscription state;
 
 
-    protected Subscription(){
-        this.state = StateSubscription.ACTIVE;
-    }
+    protected Subscription(){}
 
     public Subscription(Plan plan, Customer customer){
-        this();
 
         if (plan == null || customer == null) throw new IllegalArgumentException("customer o plan son null");
 
         this.plan = plan;
         this.customer = customer;
+        this.state = StateSubscription.ACTIVE;
     }
 
 
@@ -76,6 +76,13 @@ public class Subscription {
         }
 
         this.state = StateSubscription.ACTIVE;
+    }
+
+    public void expire(){
+
+        if (this.state == StateSubscription.CANCELLED) throw new IllegalStateException("Una subscripcion cancelada no puede expirar");
+
+        this.state = StateSubscription.EXPIRED;
     }
 
     public void cancel(){
