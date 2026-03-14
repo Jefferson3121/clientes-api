@@ -1,4 +1,4 @@
-package com.ClientHub.api.service;
+package com.ClientHub.api.service.impl.subscription;
 
 import com.ClientHub.api.component.PlanMapper;
 import com.ClientHub.api.domain.entity.Plan;
