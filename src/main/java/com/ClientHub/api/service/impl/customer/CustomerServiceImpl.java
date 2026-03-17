@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public State activateCustomer(int id){
 
-        Customer customer = getCostumerId(id);
+        Customer customer = getByCostumerId(id);
 
         if (customer.getState() == State.ACTIVE){
             throw new IllegalStateException("El cliente ya esta activo");
@@ -57,11 +57,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public State deactivateCustomer(int idCustomer){
 
-        Customer customer = getCostumerId(idCustomer);
+        Customer customer = getByCostumerId(idCustomer);
 
         if (customer.getState() == State.INACTIVE){
             throw new IllegalStateException("El cliente ya esta desactivado");
         }
+
+
 
         if (subscriptionRepository.existsByCustomerId(customer.getId())){
             throw new IllegalStateException("No se puede eliminar el cliente, existen subcripciodes asociadas a el");
@@ -80,9 +82,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public CustomerResponseDTO getByIdCustomer(Integer id) {
+    public CustomerResponseDTO getByIdCustomer(int id) {
 
-        Customer customer = getCostumerId(id);
+        Customer customer = getByCostumerId(id);
         return clientMapper.toClientResponseDTO(customer);
     }
 
@@ -91,7 +93,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateCustomerName(int id, ClientRequestChangeNameDTO changeNameDTO){
 
-        Customer customer = getCostumerId(id);
+        Customer customer = getByCostumerId(id);
 
         customer.updateName(changeNameDTO.newName());
 
@@ -102,7 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateCostumerEmail(int id, ClientRequestChangeEmailDTO clientRequestChangeEmailDTO){
 
-        Customer customer = getCostumerId(id);
+        Customer customer = getByCostumerId(id);
 
         if (clientRequestChangeEmailDTO.newEmail().equals(customer.getEmail())){
             throw new IllegalArgumentException("Email no puede ser igual a el email actual");
@@ -114,11 +116,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 
-    private Customer getCostumerId(Integer id) {
+    private Customer getByCostumerId(int id) {
 
-        if (id < 0) {
-            throw new IllegalArgumentException(String.format("Formato o valor de id incorrecto"));
-        }
+        if(id <= -1) throw new IllegalArgumentException("El id del cliente no puede ser negativo");
 
         return customerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Cliente con id: %d, no existe", id)));

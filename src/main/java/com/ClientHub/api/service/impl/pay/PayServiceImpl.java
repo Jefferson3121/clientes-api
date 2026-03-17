@@ -37,8 +37,7 @@ public class PayServiceImpl implements PayService {
 
 
     @Override
-    public PayResponseDTO getPay(Integer id){
-        Objects.requireNonNull(id, "Id del pago no puede ser null");
+    public PayResponseDTO getPay(int id){
 
         if(id <= 0){
             throw new IllegalArgumentException("Id no puede ser menor o igual a cero (0)");

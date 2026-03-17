@@ -15,7 +15,7 @@ public interface CustomerService {
 
    public State deactivateCustomer(int id);
 
-    public CustomerResponseDTO getByIdCustomer(Integer id);
+    public CustomerResponseDTO getByIdCustomer(int id);
 
     public void updateCustomerName(int id, ClientRequestChangeNameDTO clientRequestChangeNameDTO);
 
