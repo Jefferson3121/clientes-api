@@ -7,7 +7,7 @@ public interface PayService {
 
     public PayResponseDTO createPay(CreatePayRequestDTO createPayRequestDTO);
 
-    public PayResponseDTO getPay(Integer id);
+    public PayResponseDTO getPay(int id);
 
 
 }
