@@ -1,4 +1,4 @@
-package com.ClientHub.api.service.impl.subscription;
+package com.ClientHub.api.service.impl;
 
 
 import com.ClientHub.api.component.SubscriptionMapper;
@@ -6,13 +6,13 @@ import com.ClientHub.api.domain.entity.Customer;
 import com.ClientHub.api.domain.entity.Plan;
 import com.ClientHub.api.domain.entity.Subscription;
 import com.ClientHub.api.domain.enums.PlanDuration;
-import com.ClientHub.api.domain.enums.State;
 import com.ClientHub.api.domain.enums.StateSubscription;
 import com.ClientHub.api.dto.request.SubscriptionRequestDTO;
 import com.ClientHub.api.dto.response.SubscriptionResponseDTO;
 import com.ClientHub.api.repository.CustomerRepository;
 import com.ClientHub.api.repository.PlanRepository;
 import com.ClientHub.api.repository.SubscriptionRepository;
+import com.ClientHub.api.service.impl.subscription.SubscriptionServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
