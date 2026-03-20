@@ -154,7 +154,7 @@ public class PlanController {
 
     )
     @PatchMapping("/{id}/price")
-    public ResponseEntity<Void> changePlanPrice( @PathVariable int id,@RequestBody @NotNull @Positive BigDecimal price){
+    public ResponseEntity<Void> changePlanPrice( @PathVariable int id,@RequestBody BigDecimal price){
         planService.updatePlanPrice(id, price);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

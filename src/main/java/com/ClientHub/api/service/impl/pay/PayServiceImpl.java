@@ -12,8 +12,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 @RequiredArgsConstructor
 public class PayServiceImpl implements PayService {
@@ -25,7 +23,7 @@ public class PayServiceImpl implements PayService {
     @Override
     public PayResponseDTO createPay(CreatePayRequestDTO createPayRequestDTO){
 
-        Subscription subscription = susbcriptionRepsitory.findById(createPayRequestDTO.susbriptionId())
+        Subscription subscription = susbcriptionRepsitory.findById(createPayRequestDTO.subscriptionId())
                 .orElseThrow(() -> new EntityNotFoundException("Entidad no encontrada"));
 
         Pay pay = Pay.create(subscription, createPayRequestDTO.valuePay());

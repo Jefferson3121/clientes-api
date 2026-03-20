@@ -16,7 +16,7 @@ public record CreatePayRequestDTO(
                 description = "Identificador unico de la susbcripcion a la que esta asociado el pago",
                 example = "23"
         )
-        Integer susbriptionId,
+        Integer subscriptionId,
 
         @NotNull
         @Schema(

@@ -42,7 +42,7 @@ public class PayController {
             description = "Obtiene la información de un pago según su identificador único",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Pago encontrado correctamente"),
-                    @ApiResponse(responseCode = "400", description = "Identificador inválido"),
+                    @ApiResponse(responseCode = "400", description = "Tipo de dato del is invalido"),
                     @ApiResponse(responseCode = "404", description = "Pago no encontrado")
             }
     )
