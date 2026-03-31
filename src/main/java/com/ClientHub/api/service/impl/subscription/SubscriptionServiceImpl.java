@@ -13,9 +13,11 @@ import com.ClientHub.api.repository.SubscriptionRepository;
 import com.ClientHub.api.service.contrat.SubscriptionService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -49,6 +51,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public void deleteSubscription(Integer id){
 
+        log.info("inicio");
+
+
         Subscription subscription = getSUbscriptionOfRepository(id);
 
         if (subscription.getState() == StateSubscription.ACTIVE) {
@@ -56,6 +61,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
 
         subscriptionRepository.delete(subscription);
+
+        log.info("Final");
     }
 
 

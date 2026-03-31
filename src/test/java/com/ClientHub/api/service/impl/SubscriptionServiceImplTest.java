@@ -177,8 +177,11 @@ class SubscriptionServiceImplTest {
             Plan plan = new Plan("Plan 3 x 2", new BigDecimal("46000"), PlanDuration.MONTLY);
 
             Subscription subscription = new Subscription(plan, customer);
+            subscription.expire();
 
             when(subscriptionRepository.findById(45)).thenReturn(Optional.of(subscription));
+
+            subscriptionService.deleteSubscription(45);
 
             verify(subscriptionRepository, times(1)).delete(subscription);
 
