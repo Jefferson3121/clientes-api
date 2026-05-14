@@ -145,6 +145,9 @@ Feature Showcase
                                 ├── PayServiceImplTest.java
                                 ├── PlanServiceImplTest.java
                                 └── SubscriptionServiceImplTest.java
+
+
+                                
 🛠️ Development Setup
 Java (Maven) Setup
 Install Java (JDK 11+ recommended)
